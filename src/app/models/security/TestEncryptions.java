@@ -1,7 +1,3 @@
-/*
-Created by ynsy || Yunus YILMAZ || 
-*/
-
 import java.util.Scanner;
 
 public class TestEncryptions {

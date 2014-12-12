@@ -1,7 +1,3 @@
-/*
-Created by ynsy || Yunus YILMAZ || 
-*/
-
 public class PasswordEncryption {
 	public static String mixPassword(String password) throws Exception {
 		//This methods mix password then encrypt it
@@ -18,7 +14,7 @@ public class PasswordEncryption {
 
 		mixedPassword = MD5Encryption.createMD5(password);
 
-		mixedPassword = AESEncryption.encrypt(mixedPassword);
+		mixedPassword = AESEncryption.encryptData(mixedPassword);
 
 		//System.out.println("base 64: " + mixedPassword);
 		

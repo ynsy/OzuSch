@@ -1,7 +1,3 @@
-/*
-Created by ynsy || Yunus YILMAZ || 
-*/
-
 public class MD5Encryption {
 
 	public static String createMD5(String data) {
