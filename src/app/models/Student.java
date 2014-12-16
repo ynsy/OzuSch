@@ -11,11 +11,19 @@ import javax.persistence.*;
 public class Student extends Model{
 
     @Id
-    public String id;
+    public int id;
 
     public String name;
     public String surname;
     public String displayName;
     public String email;
+    public String password; //It may be a private. Is must be looked.
+
+    @OneToOne
+    public int departmentId;
+
+    @OneToOne
+    public int schoolId;
+
 
 }

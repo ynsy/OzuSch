@@ -11,10 +11,11 @@ import javax.persistence.*;
 public class Course extends Model {
 
     @Id
-    public String id;
+    public int id;
 
-    public String name;
-    public String departmentId;
-    public boolean multipleSection;
+    public String subjectName; //CS
+    public int courseNo;       //201
+    public String displayName; //It is just a display name information like "CS-201"
+    public String section;  // "A" or "B"
 
 }

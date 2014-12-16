@@ -11,9 +11,9 @@ public class PastCourse extends Model {
     @Id
     public String id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     public String studentId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     public String courseId;
 }

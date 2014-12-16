@@ -10,10 +10,13 @@ import java.util.Date;
 public class Interval extends Model {
 
     @Id
-    public String id;
+    public int id;
 
-    public String sectionId;
-    public Date startTime;
-    public Date endTime;
+    public Date startHour;
+    public Date endHour;
     public String day;
+    public String roomCode;
+
+    @OneToOne
+    public int courseId;
 }

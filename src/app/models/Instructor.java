@@ -9,10 +9,9 @@ import javax.persistence.*;
 public class Instructor extends Model {
 
     @Id
-    public String id;
+    public int id;
 
     public String name;
     public String surname;
-    public String displayName;
     public String email;
 }

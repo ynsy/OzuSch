@@ -4,16 +4,13 @@ import play.db.ebean.Model;
 import javax.persistence.*;
 
 /**
- * Created by bahadirkirdan on 12/12/14.
+ * Created by bahadirkirdan on 16/12/14.
  */
-public class Department extends Model {
+public class University extends Model {
 
     @Id
     public int id;
 
     public String name;
-
-    @OneToOne
-    public int universityId;
 
 }
