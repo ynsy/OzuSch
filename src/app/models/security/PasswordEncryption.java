@@ -1,3 +1,5 @@
+package models.security;
+
 public class PasswordEncryption {
 	public static String mixPassword(String password) throws Exception {
 		//This methods mix password then encrypt it

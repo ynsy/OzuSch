@@ -1,3 +1,5 @@
+package models.security;
+
 public class MD5Encryption {
 
 	public static String createMD5(String data) {

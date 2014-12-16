@@ -1,3 +1,5 @@
+package models.security;
+
 import java.util.Scanner;
 
 public class TestEncryptions {
