@@ -6,6 +6,9 @@
 create table student (
   id                        varchar(255) not null,
   name                      varchar(255),
+  surname                   varchar(255),
+  display_name              varchar(255),
+  email                     varchar(255),
   constraint pk_student primary key (id))
 ;
 
