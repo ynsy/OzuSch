@@ -17,4 +17,5 @@ public class Student extends Model{
     public String surname;
     public String displayName;
     public String email;
+
 }
