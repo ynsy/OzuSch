@@ -6,14 +6,16 @@ import javax.persistence.*;
 /**
  * Created by bahadirkirdan on 12/12/14.
  */
-public class PastCourse extends Model {
+
+@Entity
+public class PastCourses extends Model {
 
     @Id
     public String id;
 
-    @OneToOne
+    @OneToOne(mappedBy = "student")
     public String studentId;
 
-    @OneToOne
+    @OneToOne(mappedBy = "course")
     public String courseId;
 }

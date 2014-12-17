@@ -8,7 +8,9 @@ import javax.persistence.*;
 /**
  * Created by bahadirkirdan on 12/12/14.
  */
-public class Course extends Model {
+
+@Entity
+public class Courses extends Model {
 
     @Id
     public int id;

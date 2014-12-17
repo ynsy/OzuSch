@@ -8,7 +8,7 @@ import javax.persistence.*;
  */
 
 @Entity
-public class Student extends Model{
+public class Students extends Model{
 
     @Id
     public int id;
@@ -19,11 +19,10 @@ public class Student extends Model{
     public String email;
     public String password; //It may be a private. Is must be looked.
 
-    @OneToOne
+    @OneToOne(mappedBy = "department")
     public int departmentId;
 
-    @OneToOne
-    public int schoolId;
-
+    @OneToOne(mappedBy = "university")
+    public int universityId;
 
 }
