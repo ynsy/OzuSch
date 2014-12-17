@@ -4,11 +4,14 @@
 # --- !Ups
 
 create table student (
-  id                        varchar(255) not null,
+  id                        integer not null,
   name                      varchar(255),
   surname                   varchar(255),
   display_name              varchar(255),
   email                     varchar(255),
+  password                  varchar(255),
+  department_id             integer,
+  school_id                 integer,
   constraint pk_student primary key (id))
 ;
 
