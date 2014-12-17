@@ -1,64 +1,131 @@
 package controllers;
 
-import models.Day;
-import play.*;
-import play.mvc.*;
-import views.html.*;
+import java.util.ArrayList;
+
+import play.mvc.Controller;
+import play.mvc.Result;
+import views.html.index;
 
 public class Application extends Controller {
-	Day[] week = new Day[5];
+	public static Boolean noProblemForMultiple = true;
+	public static ArrayList<CourseSection> multipleSectionsResult;
+	public static ArrayList<Course> multipleSectionCourses;
+	public static ArrayList<Course> oneSectionCourses;
+	public static ArrayList<ArrayList<CourseSection>> result;
+	public static ArrayList<CourseSection> oneSectionsResult;
+	public static Day[] calendarOneAdded;
+	public static Boolean noProblemForOne;
+	public static ArrayList<Course> usrCourseList;
 
-    public static Result index() {
-        return ok(index.render("HEYE"));
-    }
-    
-    public void Week(){
-		setWeek();
+	public static Result index() {
+		return ok(index.render("OzUSch"));
 	}
-	
-	public Day[] getWeek() {
-		return week;
-	}
-	
-	private void setWeek(){
-		for(int index = 0; index < 5; index++){
-			if (index == 0) {
-				week[index] = Day("Monday");
-			}else if (index == 1) {
-				week[index] = Day("Tuesday");
-			}else if (index == 2) {
-				week[index] = Day("Wednesday");
-			}else if (index == 3) {
-				week[index] = Day("Thursday");
-			}else {
-				week[index] = Day("Friday");
+
+	public static void setScheduleForMultipleSections(
+			ArrayList<Course> multipleSectionCourses, int courseIndex,
+			ArrayList<CourseSection> multipleSectionsResult, Day[] newCalendar) {
+		if (!multipleSectionCourses.isEmpty()) {
+			if (noProblemForMultiple == true) {
+				for (int sectionIndex = 0; sectionIndex < multipleSectionCourses
+						.get(courseIndex).sections.size(); sectionIndex++) {
+					if (courseIndex == 0) {
+						if (multipleSectionCourses.get(courseIndex).sections
+								.get(sectionIndex).sectionTitle == "FIN202-B") {
+							System.out.println("fin202-b");
+						}
+					}
+					Week week = new Week();
+
+					Day[] calendar = week.getCalendar(newCalendar);
+					lookMeetingTimes(
+							multipleSectionCourses.get(courseIndex).sections
+									.get(sectionIndex).meetingTimes,
+							"MultipleSections", calendar);
+
+					if (getNoProblem("MultipleSections")) {
+						if (multipleSectionCourses.get(courseIndex).sections
+								.get(sectionIndex).sectionTitle == "FIN202-B") {
+							System.out.println("2");
+						}
+
+						ArrayList<CourseSection> nextMultipleSectionsResult = multipleSectionsResult;
+						nextMultipleSectionsResult.add(multipleSectionCourses
+								.get(courseIndex).sections.get(sectionIndex));
+						if (courseIndex + 1 != multipleSectionCourses.size()) {
+							setScheduleForMultipleSections(
+									multipleSectionCourses, courseIndex + 1,
+									nextMultipleSectionsResult, calendar);
+						} else {
+							result.add(nextMultipleSectionsResult);
+							result.add(oneSectionsResult);
+						}
+					} else {
+						if (multipleSectionCourses.get(courseIndex).sections
+								.get(sectionIndex).sectionTitle == "FIN202-B") {
+							System.out.println("fin202-b");
+						}
+						noProblemForMultiple = true;
+					}
+				}
 			}
 		}
 	}
-	
-	public Day[] getCalendar(Day[] calendar) {
-		Week();
-		Day[] cal = getWeek();
-        for (int day = 0; day < cal.length; day++) {
-            for (int timeIndex = 0; timeIndex < calendar[day].oClock.count; timeIndex++) {
-                cal[day].oClock[timeIndex].isStartAvailable = calendar[day].oClock[timeIndex].isStartAvailable;
-                cal[day].oClock[timeIndex].isEndAvailable = calendar[day].oClock[timeIndex].isEndAvailable;
-            }
-        }
-        return cal;
-    }
-	
-	public Day Day(String name){
-		Day day = new Day();
-        day.name = name;
-        //start from 8 am, end at 10:59 pm (15 hours)
-        for (int index = 0; index < 15; index++ ){
-            day.oClock.add(Oclock());
-        }
-        return day;
-    }
-	
-	
 
+	private static void lookMeetingTimes(ArrayList<TimePeriod> meetingTimes,
+			String string, Day[] calendar) {
+		// TODO Auto-generated method stub
 
+	}
+
+	public void setMultipleSectionCourses() {
+		if (multipleSectionCourses.size() > 0) {
+			if (multipleSectionCourses.size() != 1) {
+				// multipleSectionCourses.sort()
+			}
+			Day[] newCalendar;
+			if (!oneSectionCourses.isEmpty()) {
+				newCalendar = calendarOneAdded;
+			} else {
+				newCalendar = Week.getWeek();
+			}
+
+			setScheduleForMultipleSections(multipleSectionCourses, 0,
+					multipleSectionsResult, newCalendar);
+		} else {
+			result.add(oneSectionsResult);
+		}
+	}
+
+	public void setNoProblem(String type) {
+		if (type.equals("OneSection")) {
+			noProblemForOne = false;
+		} else {
+			noProblemForMultiple = false;
+		}
+	}
+
+	public static boolean getNoProblem(String type) {
+		if (type.equals("OneSection")) {
+			return noProblemForOne;
+		} else {
+			return noProblemForMultiple;
+		}
+	}
+
+	public static boolean isOkay() {
+		if (!usrCourseList.isEmpty()) {
+			if (result.size() > 0) {
+				int numOfOneSectCourses = oneSectionCourses.size();
+				int numOfMultipleSectCourses = multipleSectionCourses.size();
+				if (result.get(0).size() == (numOfOneSectCourses + numOfMultipleSectCourses)) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
 }
