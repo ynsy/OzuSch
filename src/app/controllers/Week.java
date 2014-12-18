@@ -1,13 +1,13 @@
 package controllers;
 
 public class Week {
-	static Day[] week = new Day[5];
+	Day[] week = new Day[5];
 
 	public Week() {
 		setWeek();
 	}
 
-	public static Day[] getWeek() {
+	public Day[] getWeek() {
 		return week;
 	}
 
