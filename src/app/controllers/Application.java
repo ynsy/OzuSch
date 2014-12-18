@@ -78,22 +78,24 @@ public class Application extends Controller {
 	}
 
 	public void setMultipleSectionCourses() {
-		if (multipleSectionCourses.size() > 0) {
-			if (multipleSectionCourses.size() != 1) {
+        if (noProblemForOne) {
+            if (multipleSectionCourses.size() > 0) {
+                if (multipleSectionCourses.size() != 1) {
 				// multipleSectionCourses.sort()
-			}
-			Day[] newCalendar;
-			if (!oneSectionCourses.isEmpty()) {
-				newCalendar = calendarOneAdded;
-			} else {
-				newCalendar = Week.getWeek();
-			}
+                }
+                Day[] newCalendar;
+                if (!oneSectionCourses.isEmpty()) {
+                    newCalendar = calendarOneAdded;
+                } else {
+                    newCalendar = Week.getWeek();
+                }
 
-			setScheduleForMultipleSections(multipleSectionCourses, 0,
+                setScheduleForMultipleSections(multipleSectionCourses, 0,
 					multipleSectionsResult, newCalendar);
-		} else {
-			result.add(oneSectionsResult);
-		}
+            } else {
+                result.add(oneSectionsResult);
+            }
+        }
 	}
 
 	public void setNoProblem(String type) {
