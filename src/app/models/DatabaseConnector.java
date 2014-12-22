@@ -1,6 +1,7 @@
 
 package models;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,6 +17,19 @@ public class DatabaseConnector {
 	public static Connection connection;
 	public static PreparedStatement statement = null;
 	public static ResultSet resultSet = null;
+	
+	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
+	
+	public static void main (String[] args) throws ClassNotFoundException, SQLException {
+		makeConnection();
+		executeInsertCommands(insertIntoCourses);
+	}
+	
+	public static void executeInsertCommands(String rsrcID) throws SQLException {
+		statement = defineStatement(insertIntoCourses);
+		resultSet = statement.executeQuery();
+		closeSetAndStatement();
+	}
 	
 	public static Connection makeConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
