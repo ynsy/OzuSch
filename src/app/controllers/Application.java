@@ -21,19 +21,12 @@ public class Application extends Controller {
 
 			
 	public static Result index() throws ClassNotFoundException, SQLException {
-		editCoursesTable();
+		
 		return ok(index.render("OzUSch"));
 		
 	}
 	
-	public static void editCoursesTable() throws SQLException, ClassNotFoundException {
-		
-		DatabaseConnector.makeConnection();
-		DatabaseConnector.defineStatement(DatabaseConnector.insertIntoCourses);
-		DatabaseConnector.defineSet();
-		DatabaseConnector.executeInsertCommands(DatabaseConnector.insertIntoCourses);
-		DatabaseConnector.closeSetAndStatement();
-	}
+
 	
 	public void startScheduler(ArrayList<Course> usrCourseList){
 		Scheduler sch = new Scheduler(usrCourseList);
