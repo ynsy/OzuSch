@@ -9,4 +9,13 @@ public class Scheduler {
 	public Scheduler(ArrayList<Course> usrCourseList){
 		this.usrCourseList = usrCourseList;
 	}
+	
+	public void findCourse(String course){
+		
+		
+	}
+	
+	public void eliminateCourses(){
+		
+	}
 }
