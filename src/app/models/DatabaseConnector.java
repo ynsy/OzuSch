@@ -38,5 +38,4 @@ public class DatabaseConnector {
 			return null;
 		}
 	}
-
 }
