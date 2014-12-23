@@ -18,15 +18,17 @@ public class Application extends Controller {
 	public Day[] calendarOneAdded;
 	public Boolean noProblemForOne;
 	public ArrayList<Course> usrCourseList;
+	
+	
+	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
 
 			
 	public static Result index() throws ClassNotFoundException, SQLException {
-		
+		DatabaseConnector.makeConnection();
+		DatabaseConnector.executeInsertCommands(insertIntoCourses);
 		return ok(index.render("OzUSch"));
 		
 	}
-	
-
 	
 	public void startScheduler(ArrayList<Course> usrCourseList){
 		Scheduler sch = new Scheduler(usrCourseList);
