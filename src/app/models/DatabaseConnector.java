@@ -34,8 +34,9 @@ public class DatabaseConnector {
 	public static Connection makeConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = null;
+		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 		
-		connection = DriverManager.getConnection("jdbc:mysql://localhost/OzuSch?characterEncoding=UTF-8" + 
+		connection = DriverManager.getConnection("jdbc:mysql://localhost/OzuSch?" + 
                 "user=ozusch&password=1");
 
 		if (connection != null) {
@@ -46,15 +47,15 @@ public class DatabaseConnector {
 		}
 	}
 	
-	static PreparedStatement defineStatement(String SQLCommand) throws SQLException {
+	public static PreparedStatement defineStatement(String SQLCommand) throws SQLException {
 		return statement = connection.prepareStatement(SQLCommand);
 	}
 
-	static ResultSet defineSet() throws SQLException {
+	public static ResultSet defineSet() throws SQLException {
 		return resultSet = statement.executeQuery();
 	}
 	
-	static  void closeSetAndStatement() throws SQLException {
+	public static  void closeSetAndStatement() throws SQLException {
 		resultSet.close();
 		statement.close();
 	}
