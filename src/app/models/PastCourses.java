@@ -13,9 +13,10 @@ public class PastCourses extends Model {
     @Id
     public String id;
 
-    @OneToOne(mappedBy = "student")
-    public String studentId;
 
-    @OneToOne(mappedBy = "course")
-    public String courseId;
+    @OneToOne
+    public Students student;
+
+    @OneToOne
+    public Courses course;
 }

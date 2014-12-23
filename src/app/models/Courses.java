@@ -1,7 +1,8 @@
 package models;
 
 import play.db.ebean.Model;
-
+import java.util.List;
+import java.util.ArrayList;
 import play.db.ebean.Model;
 import javax.persistence.*;
 
@@ -19,5 +20,12 @@ public class Courses extends Model {
     public int courseNo;       //201
     public String displayName; //It is just a display name information like "CS-201"
     public String section;  // "A" or "B"
+
+
+    @OneToMany
+    public List<RequestedCourses> requestedCourses = new ArrayList<RequestedCourses>();
+
+    @OneToMany
+    public List<LectureIntervals> lectureIntervals = new ArrayList<LectureIntervals>();
 
 }

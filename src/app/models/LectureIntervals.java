@@ -19,6 +19,8 @@ public class LectureIntervals extends Model {
     public String day;
     public String roomCode;
 
-    @OneToOne(mappedBy = "course")
-    public int courseId;
+
+    @ManyToOne
+    public Courses course;
+
 }
