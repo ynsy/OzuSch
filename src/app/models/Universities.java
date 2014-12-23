@@ -8,7 +8,6 @@ import javax.persistence.*;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.config.GlobalProperties;
 
-
 /**
  * Created by bahadirkirdan on 16/12/14.
  */

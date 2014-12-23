@@ -19,7 +19,7 @@ public class Courses extends Model {
     public String subjectName; //CS
     public int courseNo;       //201
     public String displayName; //It is just a display name information like "CS-201"
-    public String section;  // "A" or "B"
+    public String sectionNo;  // "A" or "B"
 
 
     @OneToMany

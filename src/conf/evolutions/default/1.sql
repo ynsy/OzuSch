@@ -8,7 +8,7 @@ create table courses (
   subject_name              varchar(255),
   course_no                 integer,
   display_name              varchar(255),
-  section                   varchar(255),
+  section_no                varchar(255),
   constraint pk_courses primary key (id))
 ;
 
