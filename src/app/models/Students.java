@@ -1,6 +1,8 @@
 package models;
 
 import play.db.ebean.Model;
+import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.*;
 
 /**
@@ -19,10 +21,11 @@ public class Students extends Model{
     public String email;
     public String password; //It may be a private. Is must be looked.
 
-    @OneToOne(mappedBy = "department")
-    public int departmentId;
 
-    @OneToOne(mappedBy = "university")
-    public int universityId;
+    @OneToOne
+    public Departments department;
+
+    @OneToOne
+    public Universities university;
 
 }

@@ -2,6 +2,7 @@ package models;
 
 import play.db.ebean.Model;
 import javax.persistence.*;
+import java.util.*;
 
 /**
  * Created by bahadirkirdan on 12/12/14.
@@ -15,7 +16,11 @@ public class Departments extends Model {
 
     public String name;
 
-    @OneToOne(mappedBy = "university")
-    public int universityId;
+
+    @ManyToOne
+    public Universities university;
+
+    @OneToMany
+    public List<Instructors> instructors = new ArrayList<Instructors>();
 
 }

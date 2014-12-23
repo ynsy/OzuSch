@@ -17,6 +17,7 @@ public class Instructors extends Model {
     public String surname;
     public String email;
 
-    @OneToOne(mappedBy = "university")
-    public int universityId;
+    @ManyToOne
+    public Departments department;
+
 }
