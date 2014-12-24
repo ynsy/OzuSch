@@ -4,18 +4,19 @@ package models.JSONParser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-
+import java.sql.SQLException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 
 public class Main {
 	
 	public static int COURSE_ID = 0;
 	public static int COURSE_INSTRUCTOR_ID = 0;
 	public static int LECTURE_INTERVAL = 0;
+	public static Course courseObject;
 	
 	public static JSONObject convertJSONObject(Object object){
 		return (JSONObject)object;
@@ -25,9 +26,9 @@ public class Main {
 		return (JSONArray)object;
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
+	public static void parseJSON() throws FileNotFoundException, IOException, ParseException, SQLException {
 		
-		Course courseObject = null;
+		
 		CourseInstructor courseInstructor = null;
 		LectureInterval lectureInterval = null;
 		
@@ -107,7 +108,6 @@ public class Main {
 					}
 				} 
 			}	
-			
 			//System.out.println(subjectName);
 			//courseObject.printAllCourses();
 			//courseInstructor.printAllCourseInstructors();

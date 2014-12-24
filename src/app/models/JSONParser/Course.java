@@ -1,7 +1,10 @@
 package models.JSONParser;
 
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import models.DatabaseConnector;
 
 public class Course {
 	
@@ -11,7 +14,7 @@ public class Course {
 	private String displayName;
 	private String sectionNo;
 	
-	private ArrayList<Course> courses = new ArrayList<Course>();
+	private static ArrayList<Course> courses = new ArrayList<Course>();
 	
 	public Course(int id, String subjectName, String courseNo, String displayName, String sectionNo){
 		this.id = id;
@@ -57,4 +60,14 @@ public class Course {
 			System.out.println(course.getId() + "\t" + course.getSubjectName() + "\t" + course.getCourseNo() + "\t" + course.getDisplayName() + "\t\t" + course.getSectionNo());
 		}
 	}
+	
+	public static void goToDb() throws SQLException {
+		for(Course course : courses) {
+			DatabaseConnector.statement = DatabaseConnector.connection.prepareStatement("INSERT INTO courses (id,subject_name,course_no,display_name,section_no) VALUES ("
+			+ course.getId() + ",\"" + course.getSubjectName() + "\",\"" + course.getCourseNo() + "\",\"" + course.getDisplayName() + "\",\"" + course.getSectionNo() + "\");");
+			DatabaseConnector.statement.executeUpdate();
+
+		}
+	}
+
 }

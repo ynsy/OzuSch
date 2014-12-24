@@ -1,14 +1,14 @@
 package controllers;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import org.json.simple.parser.ParseException;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import models.DatabaseConnector;
-import models.JSONParser.Main;
-import models.JSONParser.LectureInterval;
 
 public class Application extends Controller {
 	public Boolean noProblemForMultiple = true;
@@ -25,9 +25,11 @@ public class Application extends Controller {
 	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
 
 			
-	public static Result index() throws ClassNotFoundException, SQLException {
+	public static Result index() throws ClassNotFoundException, SQLException, FileNotFoundException, IOException, ParseException {
 		DatabaseConnector.makeConnection();
-		DatabaseConnector.executeInsertCommands(insertIntoCourses);	
+		models.JSONParser.Main.parseJSON();
+		models.JSONParser.Course.goToDb();
+		
 		return ok(index.render("OzUSch"));
 		
 	}
