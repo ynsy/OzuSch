@@ -15,7 +15,7 @@ public class Main {
 	
 	public static int COURSE_ID = 0;
 	public static int COURSE_INSTRUCTOR_ID = 0;
-	public static int LECTURE_INTERVAL = 0;
+	public static int LECTURE_INTERVAL_ID = 0;
 	public static Course courseObject;
 	
 	public static JSONObject convertJSONObject(Object object){
@@ -89,7 +89,7 @@ public class Main {
 				for (Object meetingTimeJSONObj : meetingTimeArray) {
 					JSONObject meetingTime = convertJSONObject(meetingTimeJSONObj);
 					
-					LECTURE_INTERVAL++;
+					LECTURE_INTERVAL_ID++;
 					String day = (String)meetingTime.get("Day");
 					String startHour = (String)meetingTime.get("StartHour");
 					String finishHour = (String)meetingTime.get("FinishHour");
@@ -103,7 +103,7 @@ public class Main {
 						JSONObject room = convertJSONObject(roomJSONObj);
 						String roomCode = (String)room.get("RoomCode");
 						
-						lectureInterval = new LectureInterval(LECTURE_INTERVAL, COURSE_ID, startHour, finishHour, day, roomCode);
+						lectureInterval = new LectureInterval(LECTURE_INTERVAL_ID, COURSE_ID, startHour, finishHour, day, roomCode);
 						
 						//System.out.println(roomCode);
 					}
