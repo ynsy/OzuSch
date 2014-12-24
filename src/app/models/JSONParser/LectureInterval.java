@@ -1,6 +1,9 @@
 package models.JSONParser;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import models.DatabaseConnector;
 
 public class LectureInterval {
 	
@@ -11,7 +14,7 @@ public class LectureInterval {
 	private String day;
 	private String roomCode;
 	
-	private ArrayList<LectureInterval> lectureIntevals = new ArrayList<LectureInterval>();
+	private static ArrayList<LectureInterval> lectureIntervals = new ArrayList<LectureInterval>();
 	
 	public LectureInterval() {
 		
@@ -25,7 +28,7 @@ public class LectureInterval {
 		this.day = day;
 		this.roomCode = roomCode;
 		
-		this.lectureIntevals.add(this);
+		this.lectureIntervals.add(this);
 	}
 
 	public int getId() {
@@ -53,13 +56,34 @@ public class LectureInterval {
 	}
 
 	public ArrayList<LectureInterval> getLectureInteval() {
-		return lectureIntevals;
+		return lectureIntervals;
 	}
 	
 	public void printAllLectureIntervals(){
-		for (LectureInterval lectureInterval : lectureIntevals) {
+		for (LectureInterval lectureInterval : lectureIntervals) {
 			System.out.println("id\tstart_hour\tend_hour\tday\troom_code\tcourse_id");
 			System.out.println(lectureInterval.getId() + "\t" + lectureInterval.getStartHour() + "\t\t" + lectureInterval.getEndHour() + "\t\t" + lectureInterval.getDay() + "\t" + lectureInterval.getRoomCode() + "\t" + lectureInterval.getCourseId());
+		}
+	}
+	
+	public static void addLectureIntervalsToDatabase() throws SQLException {
+		for (LectureInterval lectureInterval : lectureIntervals) {
+			DatabaseConnector.statement = DatabaseConnector.connection
+					.prepareStatement("INSERT INTO lecture_intervals (id,start_hour,end_hour,day,room_code,course_id) VALUES ("
+							+ lectureInterval.getId()
+							+ ",\""
+							+ lectureInterval.getStartHour()
+							+ "\",\""
+							+ lectureInterval.getEndHour()
+							+ "\",\""
+							+ lectureInterval.getDay()
+							+ "\",\""
+							+ lectureInterval.getRoomCode() 
+							+ "\","
+							+ lectureInterval.getCourseId() + ");");
+			DatabaseConnector.statement.executeUpdate();
+			DatabaseConnector.statement.close();
+
 		}
 	}
 }

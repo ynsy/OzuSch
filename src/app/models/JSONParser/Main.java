@@ -33,8 +33,8 @@ public class Main {
 		LectureInterval lectureInterval = null;
 		
 		JSONParser parser = new JSONParser();
-		Object obj = parser.parse(new FileReader("/Users/bahadirkirdan/Desktop/CS320/OzuSch/src/public/CoursesOffered.json"));
-		//Object obj = parser.parse(new FileReader("/Users/burakatalay/Desktop/CS 320/project/CS320/src/public/CoursesOffered.json"));
+	//	Object obj = parser.parse(new FileReader("/Users/bahadirkirdan/Desktop/CS320/OzuSch/src/public/CoursesOffered.json"));
+		Object obj = parser.parse(new FileReader("/Users/burakatalay/Desktop/CS 320/project/CS320/src/public/CoursesOffered.json"));
 		JSONArray jsonArray = convertJSONArray(obj);
 		
 		for (Object courseArray : jsonArray) {
@@ -89,17 +89,19 @@ public class Main {
 				for (Object meetingTimeJSONObj : meetingTimeArray) {
 					JSONObject meetingTime = convertJSONObject(meetingTimeJSONObj);
 					
-					LECTURE_INTERVAL_ID++;
+					
 					String day = (String)meetingTime.get("Day");
 					String startHour = (String)meetingTime.get("StartHour");
 					String finishHour = (String)meetingTime.get("FinishHour");
-				
+					
 					
 					//Get Room
 					Object roomObj = meetingTime.get("Room");
 					JSONArray roomArray = convertJSONArray(roomObj);
 					
 					for (Object roomJSONObj : roomArray) {
+						LECTURE_INTERVAL_ID++;
+						
 						JSONObject room = convertJSONObject(roomJSONObj);
 						String roomCode = (String)room.get("RoomCode");
 						
