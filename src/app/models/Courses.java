@@ -27,5 +27,8 @@ public class Courses extends Model {
 
     @OneToMany
     public List<LectureIntervals> lectureIntervals = new ArrayList<LectureIntervals>();
+    
+    @ManyToMany
+    public List<CourseInstructors> courseInstructors = new ArrayList<CourseInstructors>();
 
 }

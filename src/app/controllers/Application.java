@@ -7,6 +7,8 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 import models.DatabaseConnector;
+import models.JSONParser.Main;
+import models.JSONParser.LectureInterval;
 
 public class Application extends Controller {
 	public Boolean noProblemForMultiple = true;
@@ -25,7 +27,7 @@ public class Application extends Controller {
 			
 	public static Result index() throws ClassNotFoundException, SQLException {
 		DatabaseConnector.makeConnection();
-		DatabaseConnector.executeInsertCommands(insertIntoCourses);
+		DatabaseConnector.executeInsertCommands(insertIntoCourses);	
 		return ok(index.render("OzUSch"));
 		
 	}
