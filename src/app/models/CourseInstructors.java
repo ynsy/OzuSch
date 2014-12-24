@@ -20,6 +20,6 @@ public class CourseInstructors extends Model {
     public String surname;
     public boolean isPrimary;
 
-    @ManyToMany
-    public List<Courses> courses = new ArrayList<Courses>();
+    @ManyToOne
+    public Courses course;
 }
