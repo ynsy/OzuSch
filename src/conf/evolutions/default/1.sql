@@ -21,19 +21,11 @@ create table courses (
   constraint pk_courses primary key (id))
 ;
 
-create table departments (
-  id                        integer auto_increment not null,
-  name                      varchar(255),
-  university_id             integer,
-  constraint pk_departments primary key (id))
-;
-
 create table instructors (
   id                        integer auto_increment not null,
   name                      varchar(255),
   surname                   varchar(255),
   email                     varchar(255),
-  department_id             integer,
   constraint pk_instructors primary key (id))
 ;
 
@@ -68,7 +60,6 @@ create table students (
   display_name              varchar(255),
   email                     varchar(255),
   password                  varchar(255),
-  department_id             integer,
   university_id             integer,
   constraint pk_students primary key (id))
 ;
@@ -81,24 +72,18 @@ create table universities (
 
 alter table course_instructors add constraint fk_course_instructors_course_1 foreign key (course_id) references courses (id) on delete restrict on update restrict;
 create index ix_course_instructors_course_1 on course_instructors (course_id);
-alter table departments add constraint fk_departments_university_2 foreign key (university_id) references universities (id) on delete restrict on update restrict;
-create index ix_departments_university_2 on departments (university_id);
-alter table instructors add constraint fk_instructors_department_3 foreign key (department_id) references departments (id) on delete restrict on update restrict;
-create index ix_instructors_department_3 on instructors (department_id);
-alter table lecture_intervals add constraint fk_lecture_intervals_course_4 foreign key (course_id) references courses (id) on delete restrict on update restrict;
-create index ix_lecture_intervals_course_4 on lecture_intervals (course_id);
-alter table past_courses add constraint fk_past_courses_student_5 foreign key (student_id) references students (id) on delete restrict on update restrict;
-create index ix_past_courses_student_5 on past_courses (student_id);
-alter table past_courses add constraint fk_past_courses_course_6 foreign key (course_id) references courses (id) on delete restrict on update restrict;
-create index ix_past_courses_course_6 on past_courses (course_id);
-alter table requested_courses add constraint fk_requested_courses_student_7 foreign key (student_id) references students (id) on delete restrict on update restrict;
-create index ix_requested_courses_student_7 on requested_courses (student_id);
-alter table requested_courses add constraint fk_requested_courses_course_8 foreign key (course_id) references courses (id) on delete restrict on update restrict;
-create index ix_requested_courses_course_8 on requested_courses (course_id);
-alter table students add constraint fk_students_department_9 foreign key (department_id) references departments (id) on delete restrict on update restrict;
-create index ix_students_department_9 on students (department_id);
-alter table students add constraint fk_students_university_10 foreign key (university_id) references universities (id) on delete restrict on update restrict;
-create index ix_students_university_10 on students (university_id);
+alter table lecture_intervals add constraint fk_lecture_intervals_course_2 foreign key (course_id) references courses (id) on delete restrict on update restrict;
+create index ix_lecture_intervals_course_2 on lecture_intervals (course_id);
+alter table past_courses add constraint fk_past_courses_student_3 foreign key (student_id) references students (id) on delete restrict on update restrict;
+create index ix_past_courses_student_3 on past_courses (student_id);
+alter table past_courses add constraint fk_past_courses_course_4 foreign key (course_id) references courses (id) on delete restrict on update restrict;
+create index ix_past_courses_course_4 on past_courses (course_id);
+alter table requested_courses add constraint fk_requested_courses_student_5 foreign key (student_id) references students (id) on delete restrict on update restrict;
+create index ix_requested_courses_student_5 on requested_courses (student_id);
+alter table requested_courses add constraint fk_requested_courses_course_6 foreign key (course_id) references courses (id) on delete restrict on update restrict;
+create index ix_requested_courses_course_6 on requested_courses (course_id);
+alter table students add constraint fk_students_university_7 foreign key (university_id) references universities (id) on delete restrict on update restrict;
+create index ix_students_university_7 on students (university_id);
 
 
 
@@ -109,8 +94,6 @@ SET FOREIGN_KEY_CHECKS=0;
 drop table course_instructors;
 
 drop table courses;
-
-drop table departments;
 
 drop table instructors;
 
