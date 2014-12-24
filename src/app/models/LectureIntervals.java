@@ -14,8 +14,10 @@ public class LectureIntervals extends Model {
     @Id
     public int id;
 
-    public String startHour;
-    public String endHour;
+    public int startHour;
+    public int startMinute;
+    public int endHour;
+    public int endMinute;
     public String day;
     public String roomCode;
 

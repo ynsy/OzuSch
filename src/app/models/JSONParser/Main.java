@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.StringTokenizer;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -33,8 +35,8 @@ public class Main {
 		LectureInterval lectureInterval = null;
 		
 		JSONParser parser = new JSONParser();
-	//	Object obj = parser.parse(new FileReader("/Users/bahadirkirdan/Desktop/CS320/OzuSch/src/public/CoursesOffered.json"));
-		Object obj = parser.parse(new FileReader("/Users/burakatalay/Desktop/CS 320/project/CS320/src/public/CoursesOffered.json"));
+        Object obj = parser.parse(new FileReader("/Users/bahadirkirdan/Desktop/CS320/OzuSch/src/public/CoursesOffered.json"));
+	//Object obj = parser.parse(new FileReader("/Users/burakatalay/Desktop/CS 320/project/CS320/src/public/CoursesOffered.json"));
 		JSONArray jsonArray = convertJSONArray(obj);
 		
 		for (Object courseArray : jsonArray) {
@@ -91,8 +93,19 @@ public class Main {
 					
 					
 					String day = (String)meetingTime.get("Day");
-					String startHour = (String)meetingTime.get("StartHour");
-					String finishHour = (String)meetingTime.get("FinishHour");
+					String startHourStr = (String)meetingTime.get("StartHour");
+					String finishHourStr = (String)meetingTime.get("FinishHour");
+					
+					StringTokenizer tokenizer = new StringTokenizer(startHourStr, ":");
+					
+					int startHour = Integer.parseInt(tokenizer.nextToken().trim());
+					int startMinute = Integer.parseInt(tokenizer.nextToken().trim());
+					
+					tokenizer = new StringTokenizer(finishHourStr, ":");
+					
+					int finishHour = Integer.parseInt(tokenizer.nextToken().trim());
+					int finishMinute = Integer.parseInt(tokenizer.nextToken().trim());
+					
 					
 					
 					//Get Room
@@ -105,7 +118,7 @@ public class Main {
 						JSONObject room = convertJSONObject(roomJSONObj);
 						String roomCode = (String)room.get("RoomCode");
 						
-						lectureInterval = new LectureInterval(LECTURE_INTERVAL_ID, COURSE_ID, startHour, finishHour, day, roomCode);
+						lectureInterval = new LectureInterval(LECTURE_INTERVAL_ID, COURSE_ID, startHour, startMinute, finishHour, finishMinute, day, roomCode);
 						
 						//System.out.println(roomCode);
 					}

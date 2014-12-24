@@ -31,8 +31,10 @@ create table instructors (
 
 create table lecture_intervals (
   id                        integer auto_increment not null,
-  start_hour                varchar(255),
-  end_hour                  varchar(255),
+  start_hour                integer,
+  start_minute              integer,
+  end_hour                  integer,
+  end_minute                integer,
   day                       varchar(255),
   room_code                 varchar(255),
   course_id                 integer,

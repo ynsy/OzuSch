@@ -28,9 +28,9 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException, FileNotFoundException, IOException, ParseException {
 		DatabaseConnector.makeConnection();
 		models.JSONParser.Main.parseJSON();
-//		models.JSONParser.Course.addCoursesToDatabase();
-//		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-//		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+		models.JSONParser.Course.addCoursesToDatabase();
+		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 		
 		return ok(index.render("OzUSch"));
 		

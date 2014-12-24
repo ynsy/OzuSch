@@ -9,8 +9,10 @@ public class LectureInterval {
 	
 	private int id;
 	private int courseId;
-	private String startHour;
-	private String finishHour;
+	private int startHour;
+	private int startMinute;
+	private int finishHour;
+	private int finishMinute;
 	private String day;
 	private String roomCode;
 	
@@ -20,11 +22,13 @@ public class LectureInterval {
 		
 	}
 	
-	public LectureInterval(int id, int courseId, String startHour, String finishHour, String day, String roomCode) {
+	public LectureInterval(int id, int courseId, int startHour, int startMinute, int finishHour, int finishMinute, String day, String roomCode) {
 		this.id = id;
 		this.courseId = courseId;
 		this.startHour = startHour;
+		this.startMinute = startMinute;
 		this.finishHour = finishHour;
+		this.finishMinute = finishMinute;
 		this.day = day;
 		this.roomCode = roomCode;
 		
@@ -32,49 +36,61 @@ public class LectureInterval {
 	}
 
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public int getCourseId() {
-		return courseId;
+		return this.courseId;
 	}
 
-	public String getStartHour() {
-		return startHour;
+	public int getStartHour() {
+		return this.startHour;
+	}
+	
+	public int getStartMinute(){
+		return this.startMinute;
 	}
 
-	public String getEndHour() {
-		return finishHour;
+	public int getFinishHour() {
+		return this.finishHour;
+	}
+	
+	public int getFinishMinute() {
+		return this.finishMinute;
 	}
 
 	public String getDay() {
-		return day;
+		return this.day;
 	}
 
 	public String getRoomCode() {
-		return roomCode;
+		return this.roomCode;
 	}
 
 	public ArrayList<LectureInterval> getLectureInteval() {
-		return lectureIntervals;
+		return this.lectureIntervals;
 	}
 	
 	public void printAllLectureIntervals(){
 		for (LectureInterval lectureInterval : lectureIntervals) {
 			System.out.println("id\tstart_hour\tend_hour\tday\troom_code\tcourse_id");
-			System.out.println(lectureInterval.getId() + "\t" + lectureInterval.getStartHour() + "\t\t" + lectureInterval.getEndHour() + "\t\t" + lectureInterval.getDay() + "\t" + lectureInterval.getRoomCode() + "\t" + lectureInterval.getCourseId());
+			System.out.println(lectureInterval.getId() + "\t" + lectureInterval.getStartHour() + "\t\t" + lectureInterval.getFinishHour() + "\t\t" + lectureInterval.getDay() + "\t" + lectureInterval.getRoomCode() + "\t" + lectureInterval.getCourseId());
 		}
 	}
 	
 	public static void addLectureIntervalsToDatabase() throws SQLException {
 		for (LectureInterval lectureInterval : lectureIntervals) {
 			DatabaseConnector.statement = DatabaseConnector.connection
-					.prepareStatement("INSERT INTO lecture_intervals (id,start_hour,end_hour,day,room_code,course_id) VALUES ("
+					.prepareStatement("INSERT INTO lecture_intervals (id,start_hour,start_minute,end_hour,end_minute,day,room_code,course_id) VALUES ("
 							+ lectureInterval.getId()
 							+ ",\""
 							+ lectureInterval.getStartHour()
 							+ "\",\""
-							+ lectureInterval.getEndHour()
+							+ lectureInterval.getStartMinute()
+							+ "\",\""
+							+ lectureInterval.getFinishHour()
+							+ "\",\""
+							+ lectureInterval.getFinishMinute()
 							+ "\",\""
 							+ lectureInterval.getDay()
 							+ "\",\""
