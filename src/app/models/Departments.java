@@ -8,7 +8,7 @@ import java.util.*;
  * Created by bahadirkirdan on 12/12/14.
  */
 
-@Entity
+
 public class Departments extends Model {
 
     @Id

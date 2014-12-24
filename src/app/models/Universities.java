@@ -20,8 +20,9 @@ public class Universities extends Model {
 
     public String name;
 
-    @OneToMany
+    /*@OneToMany
     public List<Departments> departments = new ArrayList<Departments>();
+	*/
 
     public static Model.Finder<Long,Universities> find = new Model.Finder<Long,Universities>(Long.class, Universities.class);
 

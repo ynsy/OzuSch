@@ -17,7 +17,9 @@ public class Instructors extends Model {
     public String surname;
     public String email;
 
+    /*
     @ManyToOne
     public Departments department;
+    */
 
 }

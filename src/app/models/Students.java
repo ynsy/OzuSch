@@ -21,9 +21,10 @@ public class Students extends Model{
     public String email;
     public String password; //It may be a private. Is must be looked.
 
-
+    /*
     @OneToOne
     public Departments department;
+	*/
 
     @OneToOne
     public Universities university;
