@@ -4,9 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import org.json.simple.parser.ParseException;
+
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.homePage;
 import views.html.index;
 import models.DatabaseConnector;
 
@@ -32,7 +35,7 @@ public class Application extends Controller {
 		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
 		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 		
-		return ok(index.render("OzUSch"));
+		return ok(homePage.render("deneme"));
 		
 	}
 	
