@@ -1,4 +1,4 @@
-@(title: String)
+@(title: String, page:String)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,10 +29,11 @@
 				<div class="collapse navbar-collapse"
 					id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-						<li><a href="#">Offered Courses</a></li>
-						<li><a href="#">Selected Courses</a></li>
-						<li><a href="#">Scheduler</a></li>
+					
+						<li@if(page=="home"){ class="active"}><a href="#">Home <span class="sr-only">(current)</span></a></li>
+						<li@if(page=="offeredCourses"){ class="active"}><a href="#">Offered Courses</a></li>
+						<li@if(page=="selectedCourses"){ class="active"}><a href="#">Selected Courses</a></li>
+						<li@if(page=="scheduler"){ class="active"}><a href="#">Scheduler</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 
