@@ -25,9 +25,10 @@ dist
 /out
 /.idea_modules
 
-/.classpath
-/.project
+src/.classpath
+src/.project
 /RUNNING_PID
 /.settings
-
+src/.gitignore
+src/.settings/org.scala-ide.sdt.core.prefs
 .idea
