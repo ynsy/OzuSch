@@ -1,7 +1,17 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.regex.*;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import models.Departments;
 import models.Universities;
 import models.security.PasswordEncryption;
@@ -20,6 +30,7 @@ public class Student {
 	public ArrayList<Course> userCourses;
 	public static Pattern pattern;
 	public static Matcher matcher;
+	public static String registerMailInfo = "\n Welcome to OzuSch \n We are glad to see you here. You can do your schedule with OzuSch. \n Best regards.";
 
 	public Student(String name, String surname, String displayName,
 			String email, String password, Departments department,
@@ -40,6 +51,8 @@ public class Student {
 		Student std = new Student(name, surname, displayName, email, password,
 				department, university);
 		studentsList.add(std);
+
+		sendMail(email, "Hi " + name + registerMailInfo);
 	}
 
 	public Boolean signUp(String displayName, String password) throws Exception {
@@ -84,6 +97,42 @@ public class Student {
 		} else {
 			System.out.println("Password must be longer than 6 character!");
 			return false;
+		}
+	}
+
+	public static void sendMail(String recipient, String notification) {
+
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+
+		Session session = Session.getInstance(props,
+				new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(
+								"ozuscheduler@gmail.com", "*ozusch2014cs320*");
+					}
+				});
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("ozuscheduler@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(recipient));
+			message.setSubject("OzuSch Notification");
+			message.setText(notification);
+
+			Transport.send(message);
+
+			System.out.println("Mail Done");
+
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
