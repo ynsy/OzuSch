@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index()
+# Offered Courses
 GET     /offeredcourses             controllers.Application.offeredCourses()
 
 # Map static resources from the /public folder to the /assets URL path
