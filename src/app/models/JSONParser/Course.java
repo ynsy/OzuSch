@@ -1,5 +1,6 @@
 package models.JSONParser;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -9,9 +10,38 @@ public class Course {
 
 	private int id;
 	private String subjectName;
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+
+	public void setCourseNo(String courseNo) {
+		this.courseNo = courseNo;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public void setSectionNo(String sectionNo) {
+		this.sectionNo = sectionNo;
+	}
+
 	private String courseNo;
 	private String displayName;
 	private String sectionNo;
+	public static ArrayList<Course> dbCourseList = new ArrayList<Course>();
+
+	public static ArrayList<Course> getDbCourseList() {
+		return dbCourseList;
+	}
+
+	public static ResultSet resultSet;
+	public static java.sql.PreparedStatement statement;
 
 	private static ArrayList<Course> courses = new ArrayList<Course>();
 
@@ -80,6 +110,26 @@ public class Course {
 			DatabaseConnector.statement.close();
 
 		}
+	}
+
+	public static void retrieveCourseListFromDB() throws SQLException {
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT id, subject_name, course_no, display_name, section_no FROM courses;");
+		resultSet = statement.executeQuery();
+
+		while (resultSet.next()) {
+			Course c = new Course();
+			c.setId(resultSet.getInt(1));
+			c.setSubjectName(resultSet.getString(2));
+			c.setCourseNo(resultSet.getString(3));
+			c.setDisplayName((String) resultSet.getString(4));
+			c.setSectionNo((String) resultSet.getString(5));
+			// System.out.println(c.getDisplayName());
+			dbCourseList.add(c);
+
+			// System.out.println(resultSet.getString(2));
+		}
+		statement.close();
 	}
 
 }
