@@ -10,27 +10,6 @@ public class Course {
 
 	private int id;
 	private String subjectName;
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
-	}
-
-	public void setCourseNo(String courseNo) {
-		this.courseNo = courseNo;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
-	public void setSectionNo(String sectionNo) {
-		this.sectionNo = sectionNo;
-	}
-
 	private String courseNo;
 	private String displayName;
 	private String sectionNo;
@@ -58,6 +37,26 @@ public class Course {
 
 	public Course() {
 
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+
+	public void setCourseNo(String courseNo) {
+		this.courseNo = courseNo;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	public void setSectionNo(String sectionNo) {
+		this.sectionNo = sectionNo;
 	}
 
 	public int getId() {

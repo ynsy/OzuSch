@@ -129,7 +129,7 @@ public class Student {
 
 			Transport.send(message);
 
-			System.out.println("Mail Done");
+			System.out.println("Mail Sending Done");
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

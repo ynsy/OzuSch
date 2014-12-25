@@ -1,5 +1,6 @@
 package models.JSONParser;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -12,6 +13,9 @@ public class CourseInstructor {
 	private String name;
 	private String surname;
 	private Boolean isPrimary;
+	public static ArrayList<CourseInstructor> dbCourseInstructorList = new ArrayList<CourseInstructor>();
+	public static ResultSet resultSet;
+	public static java.sql.PreparedStatement statement;
 
 	private static ArrayList<CourseInstructor> courseInstructors = new ArrayList<CourseInstructor>();
 
@@ -28,6 +32,26 @@ public class CourseInstructor {
 		this.isPrimary = isPrimary;
 
 		this.courseInstructors.add(this);
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public void setIsPrimary(Boolean isPrimary) {
+		this.isPrimary = isPrimary;
 	}
 
 	public int getId() {
@@ -82,5 +106,23 @@ public class CourseInstructor {
 			DatabaseConnector.statement.close();
 
 		}
+	}
+
+	public static void retrieveCourseInstructorListFromDB() throws SQLException {
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT id, name, surname, is_primary, course_id FROM courses;");
+		resultSet = statement.executeQuery();
+
+		while (resultSet.next()) {
+			CourseInstructor c = new CourseInstructor();
+			c.setId(resultSet.getInt(1));
+			c.setName(resultSet.getString(2));
+			c.setSurname(resultSet.getString(3));
+			c.setIsPrimary((Boolean) resultSet.getBoolean(4));
+			c.setCourseId(resultSet.getInt(5));
+
+			dbCourseInstructorList.add(c);
+		}
+		statement.close();
 	}
 }
