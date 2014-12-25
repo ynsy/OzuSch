@@ -4,22 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import org.json.simple.parser.ParseException;
 
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.homePage;
-import views.html.offeredCourses;
+import views.html.*;
 import models.DatabaseConnector;
 
 public class Application extends Controller {
@@ -31,7 +21,8 @@ public class Application extends Controller {
 	public ArrayList<CourseSection> oneSectionsResult;
 	public Day[] calendarOneAdded;
 	public Boolean noProblemForOne;
-	public ArrayList<Course> usrCourseList;
+	public static ArrayList<Course> usrCourseList;
+	public static ArrayList<models.JSONParser.Course> courseList;
 	private static String title = "OzUSch";
 	private static String url = routes.Application.index().absoluteURL(
 			request());
@@ -40,7 +31,7 @@ public class Application extends Controller {
 
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
-		DatabaseConnector.makeConnection();
+		
 		// models.JSONParser.Main.parseJSON();
 		// models.JSONParser.Course.addCoursesToDatabase();
 		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
@@ -52,11 +43,18 @@ public class Application extends Controller {
 
 	}
 
-	public static Result offeredCourses() {
-
-		return ok(offeredCourses.render(title, "offeredCourses", url));
+	public static Result offeredCourses() throws ClassNotFoundException, SQLException,
+	FileNotFoundException, IOException, ParseException {
+		
+			DatabaseConnector.makeConnection();
+			models.JSONParser.Course.retrieveCourseListFromDB();
+			courseList = models.JSONParser.Course.getDbCourseList();
+	
+		return ok(offeredCourses.render(title, "offeredCourses", url, courseList));
 	}
-
+	public static Result signUp(){
+		return ok(signUp.render());
+	}
 	public void startScheduler(ArrayList<Course> usrCourseList) {
 		Scheduler sch = new Scheduler(usrCourseList);
 		this.usrCourseList = usrCourseList;
