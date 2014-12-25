@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.homePage;
-import views.html.index;
+import views.html.offeredCourses;
 import models.DatabaseConnector;
 
 public class Application extends Controller {
@@ -23,6 +23,8 @@ public class Application extends Controller {
 	public Day[] calendarOneAdded;
 	public Boolean noProblemForOne;
 	public ArrayList<Course> usrCourseList;
+	private static String title = "OzUSch";
+	private static String url = routes.Application.index().absoluteURL(request());
 	
 	
 	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
@@ -35,10 +37,15 @@ public class Application extends Controller {
 		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
 		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 		
-		return ok(homePage.render("deneme"));
+		//return ok(homePage.render("deneme","home"));
+	
+		return ok(homePage.render(title,"home", url));
 		
 	}
-	
+	public static Result offeredCourses(){
+		
+		return ok(offeredCourses.render(title,"offeredCourses",url));
+	}
 	public void startScheduler(ArrayList<Course> usrCourseList){
 		Scheduler sch = new Scheduler(usrCourseList);
 		this.usrCourseList = usrCourseList;
