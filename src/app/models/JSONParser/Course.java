@@ -13,6 +13,9 @@ public class Course {
 	private String courseNo;
 	private String displayName;
 	private String sectionNo;
+	private ArrayList<CourseInstructor> instructor = null;
+	private ArrayList<LectureInterval> lectures = null;
+	
 	public static ArrayList<Course> dbCourseList = new ArrayList<Course>();
 
 	public static ArrayList<Course> getDbCourseList() {
@@ -58,6 +61,15 @@ public class Course {
 	public void setSectionNo(String sectionNo) {
 		this.sectionNo = sectionNo;
 	}
+	
+	public void setInstructor(ArrayList<CourseInstructor> instructor){
+		this.instructor = instructor;
+	}
+
+	private void setLectures(ArrayList<LectureInterval> lectures) {
+		this.lectures = lectures;
+		
+	}
 
 	public int getId() {
 		return id;
@@ -82,7 +94,12 @@ public class Course {
 	public ArrayList getCourses() {
 		return courses;
 	}
-
+	public ArrayList<CourseInstructor> getInstructor(){
+		return instructor;
+	}
+	public ArrayList<LectureInterval> getLectures(){
+		return lectures;
+	}
 	public void printAllCourses() {
 		for (Course course : courses) {
 			System.out.println("id\tsubject_name\tdisplay_name\tsection_no");
@@ -113,7 +130,7 @@ public class Course {
 
 	public static void retrieveCourseListFromDB() throws SQLException {
 		statement = DatabaseConnector.connection
-				.prepareStatement("SELECT id, subject_name, course_no, display_name, section_no FROM courses;");
+				.prepareStatement("SELECT id, subject_name, course_no, display_name, section_no FROM courses");
 		resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {
@@ -123,12 +140,16 @@ public class Course {
 			c.setCourseNo(resultSet.getString(3));
 			c.setDisplayName((String) resultSet.getString(4));
 			c.setSectionNo((String) resultSet.getString(5));
+			c.setInstructor(CourseInstructor.getCourseInstructor(resultSet.getInt(1)));
+			c.setLectures(LectureInterval.getLectureInterval(resultSet.getInt(1)));
 			// System.out.println(c.getDisplayName());
 			dbCourseList.add(c);
 
 			// System.out.println(resultSet.getString(2));
 		}
 		statement.close();
+		resultSet.close();
 	}
+
 
 }
