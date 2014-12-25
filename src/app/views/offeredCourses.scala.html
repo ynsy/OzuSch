@@ -1,28 +1,32 @@
-@(title: String, page: String)
-@header(title,page)
+@(title: String, page: String, url: String)
+@header(title,page,url)
 
 <div class="container">
 	<table class="table table-bordered">
 		<thead>
-			<th>Course Name</th>
-			<th>Course Code</th>
-			<th>Course Section</th>
+			<th>Course</th>
+			<th>Course Instructor</th>
+			<th>Course Time</th>
+			<th>Course Room</th>
 		</thead>
 		<tbody>
 			<tr>
-				<td>CS</td>
-				<td>201</td>
-				<td>A</td>
+				<td>CS 201 - A</td>
+				<td>Hasan Sözer</td>
+				<td>Tuesday 13:40-15:30 , Thursday 14:40-16:30</td>
+				<td>CK:EF:231</td>
 			</tr>
 			<tr>
-				<td>CS</td>
-				<td>202</td>
-				<td>A</td>
+				<td>CS 202 - A</td>
+				<td>İsmail Arı</td>
+				<td>Wednesday 08:40-11:30</td>
+				<td>CK:EF:245</td>
 			</tr>
 			<tr>
-				<td>CS</td>
-				<td>320</td>
-				<td>A</td>
+				<td>CS 320 - A</td>
+				<td>Hasan Sözer</td>
+				<td>Tuesday 15:40-18:30</td>
+				<td>CK:EF:225</td>
 			</tr>
 		</tbody>
 	</table>
