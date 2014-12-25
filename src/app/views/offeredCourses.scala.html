@@ -1,33 +1,28 @@
-@(title: String, page: String, url: String)
+@(title: String, page: String, url: String, courseList: List[models.JSONParser.Course])
 @header(title,page,url)
 
 <div class="container">
 	<table class="table table-bordered">
 		<thead>
+			<th></th>
 			<th>Course</th>
 			<th>Course Instructor</th>
 			<th>Course Time</th>
 			<th>Course Room</th>
 		</thead>
 		<tbody>
+			@for(course <- courseList){
+			
+			
 			<tr>
-				<td>CS 201 - A</td>
-				<td>Hasan Sözer</td>
-				<td>Tuesday 13:40-15:30 , Thursday 14:40-16:30</td>
-				<td>CK:EF:231</td>
-			</tr>
-			<tr>
-				<td>CS 202 - A</td>
-				<td>İsmail Arı</td>
-				<td>Wednesday 08:40-11:30</td>
-				<td>CK:EF:245</td>
-			</tr>
-			<tr>
-				<td>CS 320 - A</td>
-				<td>Hasan Sözer</td>
-				<td>Tuesday 15:40-18:30</td>
-				<td>CK:EF:225</td>
-			</tr>
+					<td><input type="checkbox"></td>
+					<td>@{course.getDisplayName()}</td>
+					<td>@for(instructor <- course.getInstructor()){ @{instructor.getName()} @{instructor.getSurname()} }</td>
+					<td> @for(lecture <- course.getLectures()){ @{lecture.getDay()} @{lecture.getStartHour()}:@{lecture.getStartMinute()} @{lecture.getFinishHour()}:@{lecture.getFinishMinute()},  } </td>
+					<td>CK:EF:231</td>
+				</tr>
+			
+}
 		</tbody>
 	</table>
 </div>

@@ -107,10 +107,27 @@ public class CourseInstructor {
 
 		}
 	}
-
+	public static ArrayList<CourseInstructor> getCourseInstructor(int course_id) throws SQLException{
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT id, name, surname, is_primary, course_id FROM course_instructors WHERE course_id='"+course_id+"';");
+		resultSet = statement.executeQuery();
+		ArrayList<CourseInstructor> instructors = new ArrayList<CourseInstructor>();
+		while (resultSet.next()) {
+			CourseInstructor c = new CourseInstructor();
+			c.setId(resultSet.getInt(1));
+			c.setName(resultSet.getString(2));
+			c.setSurname(resultSet.getString(3));
+			c.setIsPrimary((Boolean) resultSet.getBoolean(4));
+			c.setCourseId(resultSet.getInt(5));
+			instructors.add(c);
+		}
+		resultSet.close();
+		statement.close();
+		return instructors;
+	}
 	public static void retrieveCourseInstructorListFromDB() throws SQLException {
 		statement = DatabaseConnector.connection
-				.prepareStatement("SELECT id, name, surname, is_primary, course_id FROM courses;");
+				.prepareStatement("SELECT id, name, surname, is_primary, course_id FROM course_instructors;");
 		resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {
@@ -123,6 +140,7 @@ public class CourseInstructor {
 
 			dbCourseInstructorList.add(c);
 		}
+		resultSet.close();
 		statement.close();
 	}
 }
