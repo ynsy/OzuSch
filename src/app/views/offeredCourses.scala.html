@@ -18,8 +18,8 @@
 					<td><input type="checkbox"></td>
 					<td>@{course.getDisplayName() + "-" + course.getSectionNo()}</td>
 					<td>@for(instructor <- course.getInstructor()){ @{instructor.getName()} @{instructor.getSurname()} }</td>
-					<td> @for(lecture <- course.getLectures()){ @{lecture.getDay()} @{lecture.getStartHour()}:@{lecture.getStartMinute()} @{lecture.getFinishHour()}:@{lecture.getFinishMinute()},  } </td>
-					<td>CK:EF:231</td>
+					<td> @for(lecture <- course.getLectures()){ @{lecture.getDay()} @{lecture.getStartHour()}:@{lecture.getStartMinute()} @{lecture.getFinishHour()}:@{lecture.getFinishMinute()}, <br>  } </td>
+					<td>@for(lecture <- course.getLectures()){@lecture.getRoomCode() <br>}</td>
 				</tr>
 			
 }

@@ -108,11 +108,13 @@ public class LectureInterval {
 	public ArrayList<LectureInterval> getLectureInteval() {
 		return this.lectureIntervals;
 	}
-	
-	//SORUNLU
-	public static ArrayList<LectureInterval> getLectureInterval(int course_id) throws SQLException{
+
+	// SORUNLU
+	public static ArrayList<LectureInterval> getLectureInterval(int course_id)
+			throws SQLException {
 		statement = DatabaseConnector.connection
-				.prepareStatement("SELECT id, start_hour, start_minute, end_hour, end_minute, day, room_code, course_id FROM lecture_intervals WHERE course_id = '"+course_id+"';");
+				.prepareStatement("SELECT id, start_hour, start_minute, end_hour, end_minute, day, room_code, course_id FROM lecture_intervals WHERE course_id = '"
+						+ course_id + "';");
 		resultSet = statement.executeQuery();
 		ArrayList<LectureInterval> lectureIntervalList = new ArrayList<LectureInterval>();
 		while (resultSet.next()) {
@@ -168,6 +170,7 @@ public class LectureInterval {
 			DatabaseConnector.statement.close();
 
 		}
+
 	}
 
 	public static void retrieveLectureIntervalListFromDB() throws SQLException {

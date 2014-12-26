@@ -32,10 +32,10 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 		
-		// models.JSONParser.Main.parseJSON();
-		// models.JSONParser.Course.addCoursesToDatabase();
+// models.JSONParser.Main.parseJSON();
+//		 models.JSONParser.Course.addCoursesToDatabase();
 		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-		// models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+//		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
 		// return ok(homePage.render("deneme","home"));
 
@@ -49,6 +49,7 @@ public class Application extends Controller {
 			DatabaseConnector.makeConnection();
 			models.JSONParser.Course.retrieveCourseListFromDB();
 			courseList = models.JSONParser.Course.getDbCourseList();
+			
 	
 		return ok(offeredCourses.render(title, "offeredCourses", url, courseList));
 	}
