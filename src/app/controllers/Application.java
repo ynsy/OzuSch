@@ -54,7 +54,10 @@ public class Application extends Controller {
 		return ok(offeredCourses.render(title, "offeredCourses", url, courseList));
 	}
 	public static Result signUp(){
-		return ok(signUp.render());
+		return ok(signUpPage.render(title,"signUp",url, "This is sign-up page. Please register to system."));
+	}
+	public static Result login(){
+		return ok(loginPage.render(title,"login",url, "This is login page. Please login to system."));
 	}
 	public void startScheduler(ArrayList<Course> usrCourseList) {
 		Scheduler sch = new Scheduler(usrCourseList);
