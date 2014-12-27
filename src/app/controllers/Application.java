@@ -5,12 +5,18 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import models.DatabaseConnector;
+import models.Students;
+
 import org.json.simple.parser.ParseException;
 
+import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.*;
-import models.DatabaseConnector;
+import views.html.homePage;
+import views.html.loginPage;
+import views.html.offeredCourses;
+import views.html.signUpPage;
 
 public class Application extends Controller {
 	public Boolean noProblemForMultiple = true;
@@ -28,7 +34,7 @@ public class Application extends Controller {
 			request());
 
 	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
-
+	
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 		
@@ -59,6 +65,15 @@ public class Application extends Controller {
 	public static Result login(){
 		return ok(loginPage.render(title,"login",url, "This is login page. Please login to system."));
 	}
+	
+	static Form<Students> taskForm = Form.form(Students.class);
+	
+	public static Result newStudent(){
+		Form<Students> filledForm = taskForm.bindFromRequest();
+		Students.create(filledForm.get());
+	    return redirect(routes.Application.index()); 
+	}
+	
 	public void startScheduler(ArrayList<Course> usrCourseList) {
 		Scheduler sch = new Scheduler(usrCourseList);
 		this.usrCourseList = usrCourseList;

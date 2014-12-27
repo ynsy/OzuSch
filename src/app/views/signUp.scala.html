@@ -1,6 +1,7 @@
-
+@import helper._
 	<h3>Sign Up</h3>
 	<hr>
+@form(routes.Application.newStudent()){
 		<form class="form-horizontal">
   <div class="form-group">
  	<label for="inputUsername" class="col-sm-4 control-label">Username</label>
@@ -47,3 +48,4 @@
     </div>
   </div>
 </form>
+}

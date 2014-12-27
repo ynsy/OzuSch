@@ -27,6 +27,10 @@ public class Students extends Model{
 	*/
 
     @OneToOne
-    public Universities university;
+    public Universities university;  
+
+    public static void create(Students student) {
+    	  student.save();
+    }
 
 }
