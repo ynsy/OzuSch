@@ -31,8 +31,8 @@ public class Student {
 	public String password;
 	public static ArrayList<Student> dbStudentsList = new ArrayList<Student>();
 	public Course courseTitle;
-	public ArrayList<Course> passedCourseList;
-	public ArrayList<Course> userCourses;
+	public ArrayList<Course> passedCourseList = new ArrayList<Course>();
+	public ArrayList<Course> userCourses = new ArrayList<Course>();
 	public static Pattern pattern;
 	public static Matcher matcher;
 	public static String registerMailInfo = "\n Welcome to OzuSch \n We are glad to see you here. You can do your schedule with OzuSch. \n Best regards.";
@@ -46,6 +46,25 @@ public class Student {
 		this.displayName = displayName;
 		this.email = email;
 		this.password = password;
+	}
+
+	// user selected courses retrieving information from DB
+	public ArrayList<Course> selectedCourses(int id) throws SQLException {
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT id, subject_name, course_no, display_name, section_no FROM courses where id = "
+						+ id + ";");
+		resultSet = statement.executeQuery();
+
+		while (resultSet.next()) {
+			Course c = new Course(resultSet.getInt(1), resultSet.getString(2),
+					resultSet.getString(3), resultSet.getString(4),
+					resultSet.getString(5));
+			userCourses.add(c);
+		}
+		statement.close();
+		resultSet.close();
+
+		return userCourses;
 	}
 
 	public void register(String name, String surname, String displayName,

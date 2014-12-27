@@ -13,6 +13,8 @@
 hs_err_pid*
 
 
+src/.settings/org.eclipse.core.resources.prefs
+src/activator
 logs
 project/project
 project/target
