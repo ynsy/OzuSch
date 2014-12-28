@@ -40,10 +40,10 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 		
-//		models.JSONParser.Main.parseJSON();
-//		models.JSONParser.Course.addCoursesToDatabase();
-//		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-//		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+		//models.JSONParser.Main.parseJSON();
+		//models.JSONParser.Course.addCoursesToDatabase();
+		//models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+		//models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
 		// return ok(homePage.render("deneme","home"));
 
@@ -83,6 +83,13 @@ public class Application extends Controller {
 			
 			if(!Students.isEmailValid(email) && !Students.isUsernameValid(username)){
 				String md5Password = MD5Encryption.createMD5(password);
+				
+				Universities university = new Universities();
+				university.id = 1;
+				university.name = "Ozyegin University";
+				
+				university.create(university);
+
 				
 				Students student = new Students();
 				student.display_name = username;
