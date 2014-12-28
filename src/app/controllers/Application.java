@@ -27,53 +27,63 @@ public class Application extends Controller {
 	public ArrayList<CourseSection> oneSectionsResult;
 	public Day[] calendarOneAdded;
 	public Boolean noProblemForOne;
-	public static ArrayList<Course> usrCourseList;
+	public static ArrayList<Course> usrCourseList = new ArrayList<Course>();
 	public static ArrayList<models.JSONParser.Course> courseList;
 	private static String title = "OzUSch";
 	private static String url = routes.Application.index().absoluteURL(
 			request());
 
 	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
-	
+
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
-		
-// models.JSONParser.Main.parseJSON();
-//		 models.JSONParser.Course.addCoursesToDatabase();
-		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-//		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
+		// models.JSONParser.Main.parseJSON();
+		// models.JSONParser.Course.addCoursesToDatabase();
+		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+		// models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+		
 		// return ok(homePage.render("deneme","home"));
+		
+		
+		
+		//After first connection please comment below line.
+		
+		Student.addUniversityToDatabase();
 
 		return ok(homePage.render(title, "home", url));
 
 	}
 
-	public static Result offeredCourses() throws ClassNotFoundException, SQLException,
-	FileNotFoundException, IOException, ParseException {
-		
-			DatabaseConnector.makeConnection();
-			models.JSONParser.Course.retrieveCourseListFromDB();
-			courseList = models.JSONParser.Course.getDbCourseList();
-			
-	
-		return ok(offeredCourses.render(title, "offeredCourses", url, courseList));
+	public static Result offeredCourses() throws ClassNotFoundException,
+			SQLException, FileNotFoundException, IOException, ParseException {
+
+		DatabaseConnector.makeConnection();
+		models.JSONParser.Course.retrieveCourseListFromDB();
+		courseList = models.JSONParser.Course.getDbCourseList();
+
+		return ok(offeredCourses.render(title, "offeredCourses", url,
+				courseList));
 	}
-	public static Result signUp(){
-		return ok(signUpPage.render(title,"signUp",url, "This is sign-up page. Please register to system."));
+
+	public static Result signUp() {
+		return ok(signUpPage.render(title, "signUp", url,
+				"This is sign-up page. Please register to system."));
 	}
-	public static Result login(){
-		return ok(loginPage.render(title,"login",url, "This is login page. Please login to system."));
+
+	public static Result login() {
+		return ok(loginPage.render(title, "login", url,
+				"This is login page. Please login to system."));
 	}
-	
+
 	static Form<Students> taskForm = Form.form(Students.class);
-	
-	public static Result newStudent(){
+
+	public static Result newStudent() {
 		Form<Students> filledForm = taskForm.bindFromRequest();
 		Students.create(filledForm.get());
-	    return redirect(routes.Application.index()); 
+		return redirect(routes.Application.index());
 	}
-	
+
 	public void startScheduler(ArrayList<Course> usrCourseList) {
 		Scheduler sch = new Scheduler(usrCourseList);
 		this.usrCourseList = usrCourseList;
@@ -81,7 +91,6 @@ public class Application extends Controller {
 			setOneSectionCourses();
 			setScheduleForOneSections();
 			setMultipleSectionCourses();
-
 		}
 	}
 

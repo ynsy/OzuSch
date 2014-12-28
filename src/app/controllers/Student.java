@@ -182,11 +182,17 @@ public class Student {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	public static void addUniversityToDatabase() throws SQLException{
+		DatabaseConnector.statement = DatabaseConnector.connection
+				.prepareStatement("INSERT INTO universities (id,name) VALUES (1,\"Ozyegin\"");
+		DatabaseConnector.statement.executeUpdate();
+		DatabaseConnector.statement.close();
+	}
 	public static void addStudentToDatabase(String name, String surname,
 			String displayName, String email, String password)
 			throws SQLException {
-
+		
 		DatabaseConnector.statement = DatabaseConnector.connection
 				.prepareStatement("INSERT INTO students (id,name,surname,display_name,email, password, university_id) VALUES ("
 						+ id
