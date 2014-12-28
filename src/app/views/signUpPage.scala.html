@@ -1,4 +1,4 @@
-@(title: String, page: String, url:String, signupText: String)
+@(title: String, page: String, url:String, signupText: String, studentsForm: Form[Students])
 @header(title,page,url)
 
 <div class="container">
@@ -6,7 +6,7 @@
 		<div class="well">
 			@signupText
 		</div>
-		@signUp()
+		@signUp(studentsForm)
 	</div>
 </div>
 

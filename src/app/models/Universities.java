@@ -27,4 +27,8 @@ public class Universities extends Model {
     public static Model.Finder<Long,Universities> find = new Model.Finder<Long,Universities>(Long.class, Universities.class);
 
 
+    public static void create(Universities university){
+    	Ebean.save(university);
+    }
+
 }

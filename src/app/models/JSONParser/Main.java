@@ -35,10 +35,10 @@ public class Main {
 		LectureInterval lectureInterval = null;
 
 		JSONParser parser = new JSONParser();
-		// Object obj = parser.parse(new
-		// FileReader("/Users/bahadirkirdan/Desktop/CS320/OzuSch/src/public/CoursesOffered.json"));
 		 Object obj = parser.parse(new
-		 FileReader("/Users/burakatalay/Desktop/CS 320/project/CS320/src/public/CoursesOffered.json"));
+		 FileReader("/Users/bahadirkirdan/Desktop/CS320/OzuSch/src/public/CoursesOffered.json"));
+		//Object obj = parser.parse(new
+		 //FileReader("/Users/burakatalay/Desktop/CS 320/project/CS320/src/public/CoursesOffered.json"));
 //		Object obj = parser
 //				.parse(new FileReader(
 //						"C:/Users/Yunus/Documents/GitHub/CS320/src/public/CoursesOffered.json"));
