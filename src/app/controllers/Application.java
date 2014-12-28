@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import models.DatabaseConnector;
 import models.Students;
+import models.Universities;
+import models.security.MD5Encryption;
 
 import org.json.simple.parser.ParseException;
 
@@ -38,10 +40,10 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 		
-// models.JSONParser.Main.parseJSON();
-//		 models.JSONParser.Course.addCoursesToDatabase();
-		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-//		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+//		models.JSONParser.Main.parseJSON();
+//		models.JSONParser.Course.addCoursesToDatabase();
+//		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+//		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
 		// return ok(homePage.render("deneme","home"));
 
@@ -59,19 +61,50 @@ public class Application extends Controller {
 	
 		return ok(offeredCourses.render(title, "offeredCourses", url, courseList));
 	}
+
+	static Form<Students> taskForm = Form.form(Students.class);
 	public static Result signUp(){
-		return ok(signUpPage.render(title,"signUp",url, "This is sign-up page. Please register to system."));
+		return ok(signUpPage.render(title,"signUp",url, "This is sign-up page. Please register to system.", taskForm));
 	}
 	public static Result login(){
 		return ok(loginPage.render(title,"login",url, "This is login page. Please login to system."));
 	}
 	
-	static Form<Students> taskForm = Form.form(Students.class);
 	
-	public static Result newStudent(){
+	public static Result newStudent() throws Exception{
 		Form<Students> filledForm = taskForm.bindFromRequest();
-		Students.create(filledForm.get());
-	    return redirect(routes.Application.index()); 
+		String username = filledForm.data().get("username");
+		String password = filledForm.data().get("password");
+		String cpassword = filledForm.data().get("cpassword");
+		String email = filledForm.data().get("email");
+		String cemail = filledForm.data().get("cemail");
+		String message =  "";
+		if(email.contains(cemail) && password.contains(cpassword)){
+			
+			if(!Students.isEmailValid(email) && !Students.isUsernameValid(username)){
+				String md5Password = MD5Encryption.createMD5(password);
+				
+				Students student = new Students();
+				student.display_name = username;
+				student.username = username;
+				student.password = md5Password;
+				student.email = email;
+				student.university = new Universities();
+				student.university.id = 1;
+				student.university.name = "Ozyegin";
+				Students.create(student);
+				message = "Successfull";
+			}else{
+				message = "Your username or email is used";
+			}
+			
+		}else{
+				message = "Please enter correct values.";
+		}
+
+		Boolean validEmail = Students.isEmailValid(email);
+		return ok(signUpPage.render(title,"signUp",url,"mesaj: "+message, taskForm));
+		
 	}
 	
 	public void startScheduler(ArrayList<Course> usrCourseList) {

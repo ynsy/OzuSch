@@ -1,9 +1,19 @@
 package models;
 
 import play.db.ebean.Model;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+
 import javax.persistence.*;
+
+import com.avaje.ebean.Ebean;
+import com.mysql.jdbc.Connection;
+
+import controllers.Student;
+import models.JSONParser.LectureInterval;
 
 /**
  * Created by bahadirkirdan on 12/12/14.
@@ -16,12 +26,14 @@ public class Students extends Model{
     public int id;
 
     public String name;
+
     public String surname;
-    public String displayName;
+    public String display_name;
     public String username;
     public String email;
     public String password; //It may be a private. Is must be looked.
-
+    public static ResultSet resultSet;
+	public static java.sql.PreparedStatement statement;
     /*
     @OneToOne
     public Departments department;
@@ -30,30 +42,33 @@ public class Students extends Model{
     @OneToOne
     public Universities university;
     
-    public static Finder<String,Students> findStudents = new Finder(String.class, Students.class);
+    public static void create(Students student) throws SQLException {
+    	Ebean.save(student);
+    }
+    
+    public static Boolean isUsernameValid(String username) throws SQLException, ClassNotFoundException{
+    	DatabaseConnector.makeConnection();
+		statement = DatabaseConnector.connection.prepareStatement("SELECT * FROM students WHERE username='"+username+"'");
+		resultSet = statement.executeQuery();
 
-    public static void create(Students student) {
-    	  student.save();
+		while (resultSet.next()) {
+			return true;
+		}
+		statement.close();
+		return false;
     }
     
-    public Boolean isUsernameValid(String username){
-    	String studentUsername = findStudents.ref(username).username;
+    public static Boolean isEmailValid(String email) throws SQLException, ClassNotFoundException{
+    		DatabaseConnector.makeConnection();
+    		statement = DatabaseConnector.connection.prepareStatement("SELECT * FROM students WHERE email='"+email+"'");
+    		resultSet = statement.executeQuery();
+
+    		while (resultSet.next()) {
+    			return true;
+    		}
+    		statement.close();
+    		return false;
     	
-    	if( !(studentUsername.isEmpty()) ){
-    		return true;
-    	}
-    	
-    	return false;
-    }
-    
-    public Boolean isEmailValid(String email){
-    	String studentEmail = findStudents.ref(username).email;
-    	
-    	if( !(studentEmail.isEmpty()) ){
-    		return true;
-    	}
-    	
-    	return false;
     }
 
 }
