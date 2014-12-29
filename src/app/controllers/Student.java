@@ -218,18 +218,5 @@ public class Student {
 		DatabaseConnector.statement.close();
 	}
 
-	public static void retrieveStudentListFromDB() throws SQLException {
-		statement = DatabaseConnector.connection
-				.prepareStatement("SELECT id, name, surname, display_name, email, password, unviersity_id FROM students");
-		resultSet = statement.executeQuery();
 
-		while (resultSet.next()) {
-			Student std = new Student(resultSet.getString(2),
-					resultSet.getString(3), resultSet.getString(4),
-					resultSet.getString(5), resultSet.getString(6));
-			dbStudentsList.add(std);
-		}
-		statement.close();
-		resultSet.close();
-	}
 }
