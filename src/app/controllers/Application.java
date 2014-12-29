@@ -144,7 +144,8 @@ public class Application extends Controller {
 
 				if(Student.checkPasswordSatisfaction(password)){
 					Student.addStudentToDatabase("", "", username, email, password);
-					message = "Successfull";
+					message = "Successful";
+					controllers.Student.sendMail(email, Student.registerMailInfo);
 				}else{
 					message = "Your password is weak";
 				}
@@ -160,7 +161,7 @@ public class Application extends Controller {
 		}
 
 		Boolean validEmail = Students.isEmailValid(email);
-		controllers.Student.sendMail(email, Student.registerMailInfo);
+		
 		return ok(signUpPage.render(title,"signUp",url,"mesaj: "+message, taskForm));
 	}
 
