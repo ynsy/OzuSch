@@ -1,0 +1,45 @@
+@(title: String, page: String, url: String, courseList: List[models.JSONParser.Course])
+@header(title,page,url)
+
+<div class="container">
+@helper.form(action = routes.Application.selectedCourses()) {
+	<div class="col-md-9 scrollit">
+		
+		<table class="table table-bordered">
+			<thead>
+				<th></th>
+				<th>Course</th>
+				<th>Course Instructor</th>
+				<th>Course Time</th>
+				<th>Course Room</th>
+			</thead>
+			<tbody>
+				@for(course <- courseList){
+				
+				
+				<tr>
+						<td><input type="checkbox" name="course_id" value="@{course.getId()}"></td>
+						<td>@{course.getDisplayName() + "-" + course.getSectionNo()}</td>
+						<td>@for(instructor <- course.getInstructor()){ @{instructor.getName()} @{instructor.getSurname()} }</td>
+						<td>@for(lecture <- course.getLectures()){ @{lecture.getDay()} @{lecture.getStartHour()}:@{lecture.getStartMinute()} @{lecture.getFinishHour()}:@{lecture.getFinishMinute()}, <br>  } </td>
+						<td>@for(lecture <- course.getLectures()){@lecture.getRoomCode() <br>}</td>
+					</tr>
+				
+				}	
+			</tbody>
+		</table>
+		
+	</div>
+	<div class="col-md-3 fixed">
+		<div class="list-group">
+		  <a href="#" class="list-group-item">Possibility 1</a>
+		  <a href="#" class="list-group-item">Possibility 2</a>
+		  <a href="#" class="list-group-item">Possibility 3</a>
+		  <a href="#" class="list-group-item">Possibility 4</a>
+		  <a href="#" class="list-group-item">Possibility 5</a>
+		</div>
+	</div>
+	}
+</div>
+
+@footer()
