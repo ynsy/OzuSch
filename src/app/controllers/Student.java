@@ -136,7 +136,7 @@ public class Student {
 		return userCourses;
 	}
 
-	public boolean checkPasswordSatisfaction(String password) {
+	public static boolean checkPasswordSatisfaction(String password) {
 		if (password.length() > 6) {
 			pattern = Pattern.compile("[a-zA-Z0-9]*");
 			matcher = pattern.matcher(password);
@@ -184,10 +184,17 @@ public class Student {
 	}
 	
 	public static void addUniversityToDatabase() throws SQLException{
-		DatabaseConnector.statement = DatabaseConnector.connection
-				.prepareStatement("INSERT INTO universities (id,name) VALUES (1,\"Ozyegin\"");
-		DatabaseConnector.statement.executeUpdate();
-		DatabaseConnector.statement.close();
+		Universities university = new Universities();
+		
+		university.id = 1;
+		university.name = "Ozyegin University";
+				
+		university.create(university);
+		
+//		DatabaseConnector.statement = DatabaseConnector.connection
+//				.prepareStatement("INSERT INTO universities (id,name) VALUES (1,\"Ozyegin\"");
+//		DatabaseConnector.statement.executeUpdate();
+//		DatabaseConnector.statement.close();
 	}
 	public static void addStudentToDatabase(String name, String surname,
 			String displayName, String email, String password)

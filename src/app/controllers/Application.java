@@ -13,6 +13,8 @@ import models.DatabaseConnector;
 import models.Students;
 import models.Universities;
 
+import controllers.Student;
+
 import org.json.simple.parser.ParseException;
 
 import play.data.Form;
@@ -44,12 +46,12 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 
-		// models.JSONParser.Main.parseJSON();
-		// models.JSONParser.Course.addCoursesToDatabase();
-		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-		// models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+//		models.JSONParser.Main.parseJSON();
+//		models.JSONParser.Course.addCoursesToDatabase();
+//		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+//		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
-		// return ok(homePage.render("deneme","home"));
+	//	return ok(homePage.render("deneme","home"));
 
 
 		// After first connection please comment below line.
@@ -158,6 +160,7 @@ public class Application extends Controller {
 		}
 
 		Boolean validEmail = Students.isEmailValid(email);
+		controllers.Student.sendMail(email, Student.registerMailInfo);
 		return ok(signUpPage.render(title,"signUp",url,"mesaj: "+message, taskForm));
 	}
 
