@@ -4,11 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
+import models.Courses;
 import models.DatabaseConnector;
 import models.Students;
 import models.Universities;
-import models.security.MD5Encryption;
 
 import org.json.simple.parser.ParseException;
 
@@ -18,6 +21,7 @@ import play.mvc.Result;
 import views.html.homePage;
 import views.html.loginPage;
 import views.html.offeredCourses;
+import views.html.selectedCourses;
 import views.html.signUpPage;
 
 public class Application extends Controller {
@@ -47,13 +51,17 @@ public class Application extends Controller {
 
 		// return ok(homePage.render("deneme","home"));
 
+
 		// After first connection please comment below line.
 
-		Student.addUniversityToDatabase();
+//		Student.addUniversityToDatabase();
+
 
 		return ok(homePage.render(title, "home", url));
+			
 
 	}
+
 
 	public static Result offeredCourses() throws ClassNotFoundException,
 			SQLException, FileNotFoundException, IOException, ParseException {
@@ -66,12 +74,37 @@ public class Application extends Controller {
 				courseList));
 	}
 
-	public static Result signUp() {
-		return ok(signUpPage.render(title, "signUp", url,
-				"This is sign-up page. Please register to system."));
+	static Form<Courses> courseForm = Form.form(Courses.class);
+	public static Result selectedCourses() throws ClassNotFoundException,
+	SQLException, FileNotFoundException, IOException, ParseException{
+
+		DatabaseConnector.makeConnection();
+		models.JSONParser.Course.retrieveCourseListFromDB();
+		courseList = models.JSONParser.Course.getDbCourseList();
+		Form<Courses> filledForm = courseForm.bindFromRequest();
+		Courses courses = filledForm.get();
+		String value = "";
+		final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
+        for (Map.Entry<String,String[]> entry : entries) {
+            final String key = entry.getKey();
+            value = Arrays.toString(entry.getValue());
+        }
+        value = value.substring(1);
+       	value = value.substring(0, value.length()-1);
+       	
+       	//value get 2,3,4 and it should be queried 
+       	//return some courselist and possibilites.
+       	
+		return ok(selectedCourses.render(title, "selectedCourses", url, courseList));
 	}
 
 	static Form<Students> taskForm = Form.form(Students.class);
+	public static Result signUp() {
+		
+		return ok(signUpPage.render(title, "signUp", url,
+				"This is sign-up page. Please register to system.", taskForm));
+	}
+
 
 	public static Result login() {
 		return ok(loginPage.render(title, "login", url,
@@ -89,25 +122,33 @@ public class Application extends Controller {
 		if(email.contains(cemail) && password.contains(cpassword)){
 			
 			if(!Students.isEmailValid(email) && !Students.isUsernameValid(username)){
-				String md5Password = MD5Encryption.createMD5(password);
-				
-				Universities university = new Universities();
-				university.id = 1;
-				university.name = "Ozyegin University";
-				
-				university.create(university);
 
-				
+//				Universities university = new Universities();
+//				university.id = 1;
+//				university.name = "Ozyegin University";
+//				
+//				university.create(university);
+//
+//				
 				Students student = new Students();
 				student.display_name = username;
 				student.username = username;
-				student.password = md5Password;
+				student.password = password;
 				student.email = email;
 				student.university = new Universities();
 				student.university.id = 1;
 				student.university.name = "Ozyegin";
-				Students.create(student);
-				message = "Successfull";
+			
+
+				if(Student.checkPasswordSatisfaction(password)){
+					Student.addStudentToDatabase("", "", username, email, password);
+					message = "Successfull";
+				}else{
+					message = "Your password is weak";
+				}
+				
+				
+
 			}else{
 				message = "Your username or email is used";
 			}
