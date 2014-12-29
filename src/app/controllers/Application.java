@@ -56,7 +56,7 @@ public class Application extends Controller {
 
 		// After first connection please comment below line.
 
-//		Student.addUniversityToDatabase();
+		Student.addUniversityToDatabase();
 
 
 		return ok(homePage.render(title, "home", url));
