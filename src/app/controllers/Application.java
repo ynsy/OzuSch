@@ -16,7 +16,7 @@ import models.DatabaseConnector;
 import models.Students;
 import models.Universities;
 import models.security.PasswordEncryption;
-import controllers.Student;
+import controllers.Student.*;
 
 import org.json.simple.parser.ParseException;
 
@@ -105,17 +105,30 @@ public class Application extends Controller {
 	}
 
 	static Form<Courses> courseForm = Form.form(Courses.class);
-	public static Result selectedCourses() throws ClassNotFoundException,
-	SQLException, FileNotFoundException, IOException, ParseException{
+	
+	
+	public static Result selectedCourses() throws ClassNotFoundException, SQLException, FileNotFoundException, IOException, ParseException{
 
 		DatabaseConnector.makeConnection();
 		models.JSONParser.Course.retrieveCourseListFromDB();
-		courseList = models.JSONParser.Course.getDbCourseList();
 		Form<Courses> filledForm = courseForm.bindFromRequest();
-		Courses courses = filledForm.get();
+		
+		String checkId = filledForm.data().get("course_id");
+		
+		
+		
+		//ArrayList<Course> selectedCourse = Student.selectedCourses(Integer.parseInt(checkId));
+		
+		
+		
+		courseList = models.JSONParser.Course.getDbCourseList();
+	
+	
 		String value = "";
+		
 		final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
-        for (Map.Entry<String,String[]> entry : entries) {
+        
+		for (Map.Entry<String,String[]> entry : entries) {
             final String key = entry.getKey();
             value = Arrays.toString(entry.getValue());
         }

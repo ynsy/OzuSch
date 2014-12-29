@@ -50,7 +50,7 @@ public class Student {
 	}
 
 	// user selected courses retrieving information from DB
-	public ArrayList<Course> selectedCourses(int id) throws SQLException {
+	public static ArrayList<Course> selectedCourses(int id) throws SQLException {
 		statement = DatabaseConnector.connection
 				.prepareStatement("SELECT id, subject_name, course_no, display_name, section_no FROM courses where id = "
 						+ id + ";");
