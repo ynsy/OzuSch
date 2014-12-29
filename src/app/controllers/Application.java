@@ -12,7 +12,7 @@ import models.Courses;
 import models.DatabaseConnector;
 import models.Students;
 import models.Universities;
-
+import models.security.PasswordEncryption;
 import controllers.Student;
 
 import org.json.simple.parser.ParseException;
@@ -142,6 +142,7 @@ public class Application extends Controller {
 			
 
 				if(Student.checkPasswordSatisfaction(password)){
+					password = PasswordEncryption.mixPassword(password);
 					Student.addStudentToDatabase("", "", username, email, password);
 					message = "Successful";
 					controllers.Student.sendMail(email, Student.registerMailInfo);
