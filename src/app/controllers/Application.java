@@ -2,6 +2,9 @@ package controllers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +36,8 @@ public class Application extends Controller {
 	public ArrayList<Course> oneSectionCourses;
 	public ArrayList<ArrayList<CourseSection>> result;
 	public ArrayList<CourseSection> oneSectionsResult;
+	public static ArrayList<String> studentInformation = new ArrayList<String>();
+	public static ArrayList<Student> dbStudentsList = new ArrayList<Student>();
 	public Day[] calendarOneAdded;
 	public Boolean noProblemForOne;
 	public static ArrayList<Course> usrCourseList = new ArrayList<Course>();
@@ -40,6 +45,8 @@ public class Application extends Controller {
 	private static String title = "OzUSch";
 	private static String url = routes.Application.index().absoluteURL(
 			request());
+	public static ResultSet resultSet;
+	public static PreparedStatement statement;
 
 	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
 
@@ -51,17 +58,38 @@ public class Application extends Controller {
 //		models.JSONParser.CourseInstructor.addInstructorsToDatabase();
 //		models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
-	//	return ok(homePage.render("deneme","home"));
+//		return ok(homePage.render("deneme","home"));
 
 
 		// After first connection please comment below line.
 
 //		Student.addUniversityToDatabase();
 
-
+		retrieveStudentInformationFromDB();
 		return ok(homePage.render(title, "home", url));
 			
 
+	}
+	
+	public static void retrieveStudentInformationFromDB() throws SQLException, ClassNotFoundException {
+		DatabaseConnector.makeConnection();
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT display_name, email FROM students");
+		resultSet = statement.executeQuery();
+
+		ResultSetMetaData rsmd = resultSet.getMetaData();
+	    int columnsNumber = rsmd.getColumnCount();
+	    while (resultSet.next()) {
+	        for (int i = 1; i <= columnsNumber; i++) {
+	            String columnValue = resultSet.getString(i);
+//	            System.out.print(columnValue);
+	            studentInformation.add(columnValue);
+	        }
+	 
+	    }
+	    System.out.println(studentInformation);
+		statement.close();
+		resultSet.close();
 	}
 
 
