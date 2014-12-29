@@ -14,6 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import models.CourseInstructors;
 import models.DatabaseConnector;
 import models.Departments;
 import models.Universities;
@@ -32,7 +33,7 @@ public class Student {
 	public static ArrayList<Student> dbStudentsList = new ArrayList<Student>();
 	public Course courseTitle;
 	public ArrayList<Course> passedCourseList = new ArrayList<Course>();
-	public ArrayList<Course> userCourses = new ArrayList<Course>();
+	public static ArrayList<Course> userCourses = new ArrayList<Course>();
 	public ArrayList<Course> eliminatedCourses = new ArrayList<Course>();
 	public static Pattern pattern;
 	public static Matcher matcher;
@@ -50,22 +51,36 @@ public class Student {
 	}
 
 	// user selected courses retrieving information from DB
-	public static ArrayList<Course> selectedCourses(int id) throws SQLException {
+	public static Course selectedCourses(int id) throws SQLException, ClassNotFoundException {
+		DatabaseConnector.makeConnection();
 		statement = DatabaseConnector.connection
-				.prepareStatement("SELECT id, subject_name, course_no, display_name, section_no FROM courses where id = "
-						+ id + ";");
+				.prepareStatement("SELECT c.id, c.subject_name, c.course_no, c.display_name, c.section_no, ci.id, ci.name, ci.surname, li.id, li.start_hour, li.start_minute, li.end_hour, li.end_minute, li.day, li.room_code  FROM courses as c left outer join course_instructors as ci on c.id = ci.course_id left outer join lecture_intervals as li on c.id = li.course_id where c.id = "+ id + ";");
 		resultSet = statement.executeQuery();
+		
+		Course course = null;
 
 		while (resultSet.next()) {
-			Course c = new Course(resultSet.getInt(1), resultSet.getString(2),
+			course = new Course(resultSet.getInt(1), resultSet.getString(2),
 					resultSet.getString(3), resultSet.getString(4),
 					resultSet.getString(5));
-			userCourses.add(c);
-		}
+			
+			
+			CourseInstructor ins = new CourseInstructor(resultSet.getInt(6), resultSet.getInt(1) ,resultSet.getString(7), resultSet.getString(8), resultSet.getBoolean(9));
+			ArrayList<CourseInstructor> courseInstructor = new ArrayList<CourseInstructor>();
+			courseInstructor.add(ins);
+			course.setInstructor(courseInstructor);
+			
+			LectureInterval lInterval = new LectureInterval(resultSet.getInt(9), resultSet.getInt(1), resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12), resultSet.getInt(13), resultSet.getString(14), resultSet.getString(15));
+			ArrayList<LectureInterval> lectureIntervals = new ArrayList<LectureInterval>();
+			lectureIntervals.add(lInterval);
+			course.setLectures(lectureIntervals);
+			
+		} 
+	
 		statement.close();
 		resultSet.close();
 
-		return userCourses;
+		return course;
 	}
 
 	public ArrayList<Course> passedCourses(int id) throws SQLException {

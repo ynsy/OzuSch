@@ -66,9 +66,8 @@ public class Course {
 		this.instructor = instructor;
 	}
 
-	private void setLectures(ArrayList<LectureInterval> lectures) {
+	public void setLectures(ArrayList<LectureInterval> lectures) {
 		this.lectures = lectures;
-		
 	}
 
 	public int getId() {

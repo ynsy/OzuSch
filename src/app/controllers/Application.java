@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import models.Courses;
 import models.DatabaseConnector;
 import models.Students;
 import models.Universities;
 import models.security.PasswordEncryption;
-import controllers.Student.*;
 
 import org.json.simple.parser.ParseException;
 
@@ -65,7 +65,8 @@ public class Application extends Controller {
 
 //		Student.addUniversityToDatabase();
 
-		retrieveStudentInformationFromDB();
+		//retrieveStudentInformationFromDB();
+		//selectedCourses();
 		return ok(homePage.render(title, "home", url));
 			
 
@@ -113,16 +114,9 @@ public class Application extends Controller {
 		models.JSONParser.Course.retrieveCourseListFromDB();
 		Form<Courses> filledForm = courseForm.bindFromRequest();
 		
-		String checkId = filledForm.data().get("course_id");
+		ArrayList<models.JSONParser.Course> selectedCourse = new ArrayList<models.JSONParser.Course>();
 		
-		
-		
-		//ArrayList<Course> selectedCourse = Student.selectedCourses(Integer.parseInt(checkId));
-		
-		
-		
-		courseList = models.JSONParser.Course.getDbCourseList();
-	
+		courseList = models.JSONParser.Course.getDbCourseList();	
 	
 		String value = "";
 		
@@ -133,12 +127,17 @@ public class Application extends Controller {
             value = Arrays.toString(entry.getValue());
         }
         value = value.substring(1);
-       	value = value.substring(0, value.length()-1);
+        value = value.substring(0, value.length()-1);
        	
-       	//value get 2,3,4 and it should be queried 
-       	//return some courselist and possibilites.
+       	StringTokenizer tokenizer = new StringTokenizer(value, ",");
        	
-		return ok(selectedCourses.render(title, "selectedCourses", url, courseList));
+       	while(tokenizer.hasMoreTokens()){
+       		int token = Integer.parseInt(tokenizer.nextToken().trim());
+       		System.out.println("TOKEN:" + token);
+       		selectedCourse.add(controllers.Student.selectedCourses(token));
+       	}
+       
+		return ok(selectedCourses.render(title, "selectedCourses", url, selectedCourse));
 	}
 
 	static Form<Students> taskForm = Form.form(Students.class);
