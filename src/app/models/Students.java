@@ -29,7 +29,6 @@ public class Students extends Model{
 
     public String surname;
     public String display_name;
-    public String username;
     public String email;
     public String password; //It may be a private. Is must be looked.
     public static ResultSet resultSet;
@@ -48,7 +47,7 @@ public class Students extends Model{
     
     public static Boolean isUsernameValid(String username) throws SQLException, ClassNotFoundException{
     	DatabaseConnector.makeConnection();
-		statement = DatabaseConnector.connection.prepareStatement("SELECT * FROM students WHERE username='"+username+"'");
+		statement = DatabaseConnector.connection.prepareStatement("SELECT * FROM students WHERE display_name='"+username+"'");
 		resultSet = statement.executeQuery();
 
 		while (resultSet.next()) {
