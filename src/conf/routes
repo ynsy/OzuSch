@@ -6,9 +6,12 @@
 GET     /                           controllers.Application.index()
 # Offered Courses
 GET     /offeredcourses             controllers.Application.offeredCourses()
+
+# Selected Courses
+GET     /selectedcourses             controllers.Application.selectedCourses()
+
 # Sign Up Page
 GET     /signup             		controllers.Application.signUp()
-
 POST    /signup                 	controllers.Application.newStudent()
 
 # Login Page
