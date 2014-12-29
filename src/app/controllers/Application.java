@@ -28,6 +28,7 @@ import views.html.loginPage;
 import views.html.offeredCourses;
 import views.html.selectedCourses;
 import views.html.signUpPage;
+import views.html.scheduler;
 
 public class Application extends Controller {
 	public Boolean noProblemForMultiple = true;
@@ -138,6 +139,10 @@ public class Application extends Controller {
        	}
        
 		return ok(selectedCourses.render(title, "selectedCourses", url, selectedCourse));
+	}
+	
+	public static Result scheduler(){
+		return ok(scheduler.render(title, "selectedCourses", url, null));
 	}
 
 	static Form<Students> taskForm = Form.form(Students.class);
