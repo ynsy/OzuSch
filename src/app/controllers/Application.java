@@ -34,17 +34,17 @@ import views.html.scheduler;
 
 public class Application extends Controller {
 	public static Boolean noProblemForMultiple = true;
-	public static ArrayList<CourseSection> multipleSectionsResult;
-	public static ArrayList<Course> multipleSectionCourses;
-	public static ArrayList<Course> oneSectionCourses;
-	public static ArrayList<ArrayList<CourseSection>> result;
-	public static ArrayList<CourseSection> oneSectionsResult;
+	public static ArrayList<CourseSection> multipleSectionsResult = new ArrayList<CourseSection>();
+	public static ArrayList<Course> multipleSectionCourses = new ArrayList<Course>();
+	public static ArrayList<Course> oneSectionCourses = new ArrayList<Course>();
+	public static ArrayList<ArrayList<CourseSection>> result = new ArrayList<ArrayList<CourseSection>>();
+	public static ArrayList<CourseSection> oneSectionsResult = new ArrayList<CourseSection>();
 	public static ArrayList<String> studentInformation = new ArrayList<String>();
 	public static ArrayList<Student> dbStudentsList = new ArrayList<Student>();
 	public static Day[] calendarOneAdded;
-	public static Boolean noProblemForOne;
+	public static Boolean noProblemForOne = true;
 	public static ArrayList<Course> usrCourseList = new ArrayList<Course>();
-	public static ArrayList<models.JSONParser.Course> courseList;
+	public static ArrayList<models.JSONParser.Course> courseList = new ArrayList<models.JSONParser.Course>();
 	private static String title = "OzUSch";
 	private static String url = routes.Application.index().absoluteURL(
 			request());
@@ -56,16 +56,16 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 
-		 models.JSONParser.Main.parseJSON();
-		 models.JSONParser.Course.addCoursesToDatabase();
-		 models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+//		 models.JSONParser.Main.parseJSON();
+//		 models.JSONParser.Course.addCoursesToDatabase();
+//		 models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+//		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
 		// return ok(homePage.render("deneme","home"));
 
 		// After first connection please comment below line.
 
-		 Student.addUniversityToDatabase();
+//		 Student.addUniversityToDatabase();
 
 		// Student.addUniversityToDatabase();
 
@@ -196,63 +196,14 @@ public class Application extends Controller {
 		
 		startScheduler();
 		
+		System.out.println("RESUlT:" + result);
+		
 
 		if(user != null) {
 			return ok(scheduler.render(title, "scheduler", url, result, true));
 		  } else {
 			  return redirect("/login");
 		  }
-
-		// for (models.JSONParser.Course course : selectedCourse) {
-		// ArrayList<LectureInterval> lectureIntervals = new
-		// ArrayList<LectureInterval>();
-		// lectureIntervals = course.getLectures();
-		//
-		// int startHour = 0;
-		// int startMinute = 0;
-		// int finishHour = 0;
-		// int finishMinute = 0;
-		// String day = "";
-		//
-		// if(finalCourses.isEmpty()){
-		// finalCourses.add(course);
-		// }else{
-		// for (LectureInterval lectureInterval : lectureIntervals) {
-		// startHour = lectureInterval.getStartHour();
-		// startMinute = lectureInterval.getStartMinute();
-		// finishHour = lectureInterval.getFinishHour();
-		// finishMinute = lectureInterval.getFinishMinute();
-		// day = lectureInterval.getDay();
-		// }
-		// for (models.JSONParser.Course finalCourse : finalCourses) {
-		// ArrayList<LectureInterval> finalLectureInvervals = new
-		// ArrayList<LectureInterval>();
-		// finalLectureInvervals = finalCourse.getLectures();
-		//
-		// for (LectureInterval finalLectureInverval : finalLectureInvervals) {
-		// int finalStartHour = finalLectureInverval.getStartHour();
-		// int finalStartMinute = finalLectureInverval.getStartMinute();
-		// int finalFinishHour = finalLectureInverval.getFinishHour();
-		// int finalFinishMinute = finalLectureInverval.getFinishMinute();
-		// String finalDay = finalLectureInverval.getDay();
-		//
-		// if(day.equals(finalDay)){
-		// if()
-		// }else{
-		// finalCourses.
-		// }
-		//
-		// }
-		// }
-		// }
-		// }
-
-		if (user != null) {
-			return ok(scheduler.render(title, "scheduler", url, finalCourses,
-					true));
-		} else {
-			return redirect("/login");
-		}
 		
 	}
 
@@ -447,15 +398,14 @@ public class Application extends Controller {
 		}
 	}
 
-	public static ArrayList<ArrayList<CourseSection>> startScheduler() {
+	public static void startScheduler() {
 		selectedCoursesToCourses();
+		System.out.println("Size: " + usrCourseList.size());
 		if (!usrCourseList.isEmpty()) {
 			setOneSectionCourses();
 			setScheduleForOneSections();
 			setMultipleSectionCourses();
-			return result;
 		}
-		return null;
 	}
 
 
@@ -480,25 +430,31 @@ public class Application extends Controller {
 		// set Week with relevant meetingTime
 		if (timeIndex == startIndex) {
 			if (calendar[day].oClock.get(startIndex).isStartAvailable == true) {
+				System.out.println("Degisti 1");
 				calendar[day].oClock.get(startIndex).isStartAvailable = false;
 			} else {
 				setNoProblem(type);
 			}
 		} else if (timeIndex == period) {
 			if (calendar[day].oClock.get(period).isEndAvailable == true) {
+				System.out.println("Degisti Son");
 				calendar[day].oClock.get(period).isEndAvailable = false;
 			} else {
 				setNoProblem(type);
 			}
 		} else {
+			System.out.println("Bakıyor");
 			if (calendar[day].oClock.get(timeIndex).isStartAvailable == true) {
 				if (calendar[day].oClock.get(timeIndex).isEndAvailable == true) {
+					System.out.println("Degisti Ara");
 					calendar[day].oClock.get(timeIndex).isStartAvailable = false;
 					calendar[day].oClock.get(timeIndex).isEndAvailable = false;
 				} else {
+					System.out.println("Hata 2");
 					setNoProblem(type);
 				}
 			} else {
+				System.out.println("Hata 1");
 				setNoProblem(type);
 			}
 		}
@@ -508,16 +464,18 @@ public class Application extends Controller {
 			String type, Day[] calendar) {
 		// look meetingTimes for relevant course
 		if (meetingTimes.size() > 0) {
+			System.out.println("Buyuk");
 			for (int meetingIndex = 0; meetingIndex < meetingTimes.size(); meetingIndex++) {
+				System.out.println("meetingIndex: " + meetingIndex);
 				if (getNoProblem(type) == true) {
 					int day = meetingTimes.get(meetingIndex).dayIndex;
 					// lessons allways start min at 8 so startHour-8
 					int startIndex = (meetingTimes.get(meetingIndex).startHour) - 8;
-					int period = startIndex
-							+ meetingTimes.get(meetingIndex).hours;
-					for (int timeIndex = startIndex; startIndex < period; startIndex++) {
+					int period = startIndex + meetingTimes.get(meetingIndex).hours;
+					for (int timeIndex = startIndex; startIndex < period; timeIndex++) {
 						if (getNoProblem(type) == true
 								&& type.equals("OneSection")) {
+							System.out.println("Sete Girdi!");
 							setTimeIntervals(timeIndex, startIndex, period,
 									day, "OneSection", calendar);
 						} else if (getNoProblem(type) == true
@@ -538,13 +496,14 @@ public class Application extends Controller {
 	}
 
 	private static void setScheduleForOneSections() {
+		System.out.println("Girmeli!");
 		if (!oneSectionCourses.isEmpty()) {
+			System.out.println("Dolu!");
 			Day[] calendar = new Week().getWeek();
 			for (int index = 0; index < oneSectionCourses.size(); index++) {
 				if (noProblemForOne == true) {
-					lookMeetingTimes(
-							oneSectionCourses.get(index).sections.get(0).meetingTimes,
-							"OneSection", calendar);
+					System.out.println("Sorunsuz");
+					lookMeetingTimes(oneSectionCourses.get(index).sections.get(0).meetingTimes,"OneSection", calendar);
 					oneSectionsResult.add(oneSectionCourses.get(index).sections
 							.get(0));
 				} else {
@@ -613,6 +572,7 @@ public class Application extends Controller {
 	public static void setMultipleSectionCourses() {
 		if (noProblemForOne) {
 			if (multipleSectionCourses.size() > 0) {
+				System.out.println("Girmememli!!!");
 				if (multipleSectionCourses.size() != 1) {
 					// multipleSectionCourses.sort()
 				}

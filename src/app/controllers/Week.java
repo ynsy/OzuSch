@@ -32,10 +32,8 @@ public class Week {
 		Day[] cal = getWeek();
 		for (int day = 0; day < cal.length; day++) {
 			for (int timeIndex = 0; timeIndex < calendar[day].oClock.size(); timeIndex++) {
-				cal[day].oClock.get(timeIndex).isStartAvailable = calendar[day].oClock
-						.get(timeIndex).isStartAvailable;
-				cal[day].oClock.get(timeIndex).isEndAvailable = calendar[day].oClock
-						.get(timeIndex).isEndAvailable;
+				cal[day].oClock.get(timeIndex).isStartAvailable = calendar[day].oClock.get(timeIndex).isStartAvailable;
+				cal[day].oClock.get(timeIndex).isEndAvailable = calendar[day].oClock.get(timeIndex).isEndAvailable;
 			}
 		}
 		return cal;

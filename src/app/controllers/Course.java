@@ -6,7 +6,7 @@ public class Course {
 	public String subjectName;
 	public String courseNo;
 	public String courseTitle;
-	public ArrayList<CourseSection> sections;
+	public ArrayList<CourseSection> sections = new ArrayList<CourseSection>();
 
 	public Course(String subjectName, String courseNo) {
 		this.courseNo = courseNo;

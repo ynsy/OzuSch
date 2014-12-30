@@ -23,7 +23,7 @@ public class CourseSection {
 	String sectionTitle;
 	String sectionNo;
 	String instructor;
-	ArrayList<TimePeriod> meetingTimes;
+	ArrayList<TimePeriod> meetingTimes = new ArrayList<TimePeriod>();
 
 	public CourseSection(String courseTitle, String sectionNo, String instructor) {
 		this.sectionNo = sectionNo;

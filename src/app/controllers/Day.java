@@ -14,8 +14,8 @@ public class Day {
 		this.name = name;
 	}
 
-	ArrayList<Oclock> oClock;
-	Oclock oclock;
+	public ArrayList<Oclock> oClock = new ArrayList<Oclock>();
+	public Oclock oclock = new Oclock();
 
 	public Day(String name) {
 		this.name = name;
