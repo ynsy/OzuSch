@@ -16,6 +16,7 @@ import models.Courses;
 import models.DatabaseConnector;
 import models.Students;
 import models.Universities;
+import models.JSONParser.LectureInterval;
 import models.security.PasswordEncryption;
 
 import org.json.simple.parser.ParseException;
@@ -141,8 +142,73 @@ public class Application extends Controller {
 		return ok(selectedCourses.render(title, "selectedCourses", url, selectedCourse));
 	}
 	
-	public static Result scheduler(){
-		return ok(scheduler.render(title, "selectedCourses", url, null));
+	public static Result scheduler() throws ClassNotFoundException, SQLException{
+		
+		DatabaseConnector.makeConnection();
+		String value = "";
+		ArrayList<models.JSONParser.Course> selectedCourse = new ArrayList<models.JSONParser.Course>();
+		ArrayList<models.JSONParser.Course> finalCourses = new ArrayList<models.JSONParser.Course>();
+		
+		final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
+		
+		for (Map.Entry<String,String[]> entry : entries) {
+            final String key = entry.getKey();
+            value = Arrays.toString(entry.getValue());
+        }
+		value = value.substring(1);
+        value = value.substring(0, value.length()-1);
+        
+    	StringTokenizer tokenizer = new StringTokenizer(value, ",");
+        
+    	while(tokenizer.hasMoreTokens()){
+       		int token = Integer.parseInt(tokenizer.nextToken().trim());
+       		selectedCourse.add(controllers.Student.selectedCourses(token));
+       	}
+    	
+    	
+//    	for (models.JSONParser.Course course : selectedCourse) {
+//			ArrayList<LectureInterval> lectureIntervals = new ArrayList<LectureInterval>();
+//			lectureIntervals = course.getLectures();
+//			
+//			int startHour = 0;
+//			int startMinute = 0;
+//			int finishHour = 0;
+//			int finishMinute = 0;
+//			String day = "";
+//			
+//			if(finalCourses.isEmpty()){
+//				finalCourses.add(course);
+//			}else{
+//			    for (LectureInterval lectureInterval : lectureIntervals) {
+//			    	startHour = lectureInterval.getStartHour();
+//					startMinute = lectureInterval.getStartMinute();
+//					finishHour = lectureInterval.getFinishHour();
+//					finishMinute = lectureInterval.getFinishMinute();
+//					day = lectureInterval.getDay();
+//				}
+//				for (models.JSONParser.Course finalCourse : finalCourses) {
+//					ArrayList<LectureInterval> finalLectureInvervals = new ArrayList<LectureInterval>();
+//					finalLectureInvervals = finalCourse.getLectures();
+//					
+//					for (LectureInterval finalLectureInverval : finalLectureInvervals) {
+//						int finalStartHour = finalLectureInverval.getStartHour();
+//						int finalStartMinute = finalLectureInverval.getStartMinute();
+//						int finalFinishHour = finalLectureInverval.getFinishHour();
+//						int finalFinishMinute = finalLectureInverval.getFinishMinute();
+//						String finalDay = finalLectureInverval.getDay();
+//						
+//						if(day.equals(finalDay)){
+//							if()
+//						}else{
+//							finalCourses.
+//						}
+//						
+//					}
+//				}
+//			}
+//		}
+		
+		return ok(scheduler.render(title, "selectedCourses", url, finalCourses));
 	}
 
 	static Form<Students> taskForm = Form.form(Students.class);

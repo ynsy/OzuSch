@@ -58,6 +58,8 @@ public class Student {
 		resultSet = statement.executeQuery();
 		
 		Course course = null;
+		ArrayList<CourseInstructor> courseInstructor = new ArrayList<CourseInstructor>();
+		ArrayList<LectureInterval> lectureIntervals = new ArrayList<LectureInterval>();
 
 		while (resultSet.next()) {
 			course = new Course(resultSet.getInt(1), resultSet.getString(2),
@@ -66,12 +68,12 @@ public class Student {
 			
 			
 			CourseInstructor ins = new CourseInstructor(resultSet.getInt(6), resultSet.getInt(1) ,resultSet.getString(7), resultSet.getString(8), resultSet.getBoolean(9));
-			ArrayList<CourseInstructor> courseInstructor = new ArrayList<CourseInstructor>();
+			
 			courseInstructor.add(ins);
 			course.setInstructor(courseInstructor);
 			
 			LectureInterval lInterval = new LectureInterval(resultSet.getInt(9), resultSet.getInt(1), resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12), resultSet.getInt(13), resultSet.getString(14), resultSet.getString(15));
-			ArrayList<LectureInterval> lectureIntervals = new ArrayList<LectureInterval>();
+			
 			lectureIntervals.add(lInterval);
 			course.setLectures(lectureIntervals);
 			

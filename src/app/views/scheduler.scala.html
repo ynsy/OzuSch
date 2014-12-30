@@ -15,17 +15,17 @@
 			</thead>
 			<tbody>
 				
-				
+				@for(course <- courseList){
 				
 				<tr>
 						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
+						<td>@{course.getDisplayName() + "-" + course.getSectionNo()}</td>
+						<td>@for(instructor <- course.getInstructor()){ @{instructor.getName()} @{instructor.getSurname()} }</td>
+						<td>@for(lecture <- course.getLectures()){ @{lecture.getDay()} @{lecture.getStartHour()}:@{lecture.getStartMinute()} @{lecture.getFinishHour()}:@{lecture.getFinishMinute()}, <br>  } </td>
+						<td>@for(lecture <- course.getLectures()){@lecture.getRoomCode() <br>}</td>
 					</tr>
 				
-					
+					}
 				 
 			</tbody>
 		</table>
