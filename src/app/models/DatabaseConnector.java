@@ -24,7 +24,7 @@ public class DatabaseConnector {
 
 		connection = DriverManager
 				.getConnection("jdbc:mysql://localhost/OzuSch?"
-						+ "user=root&password=root");
+						+ "user=ozusch&password=1");
 
 		if (connection != null) {
 			return connection;

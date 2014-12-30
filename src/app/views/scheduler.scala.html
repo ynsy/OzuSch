@@ -1,4 +1,4 @@
-@(title: String, page: String, url: String, courseList: List[models.JSONParser.Course], isLoggedIn: Boolean)
+@(title: String, page: String, url: String, courseSectionPossibilites: ArrayList[ArrayList[controllers.CourseSection]], isLoggedIn: Boolean)
 @header(title,page,url,isLoggedIn)
 
 <div class="container">
@@ -15,17 +15,18 @@
 			</thead>
 			<tbody>
 				
-				@for(course <- courseList){
-				
+				@for(courseSections <- courseSectionPossibilites){
 				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+					@for(section <- courseSections){
+					<tr>
 						<td></td>
-						<td>@{course.getDisplayName() + "-" + course.getSectionNo()}</td>
-						<td>@for(instructor <- course.getInstructor()){ @{instructor.getName()} @{instructor.getSurname()} }</td>
-						<td>@for(lecture <- course.getLectures()){ @{lecture.getDay()} @{lecture.getStartHour()}:@{lecture.getStartMinute()} @{lecture.getFinishHour()}:@{lecture.getFinishMinute()}, <br>  } </td>
-						<td>@for(lecture <- course.getLectures()){@lecture.getRoomCode() <br>}</td>
+						<td>@{section.getSectionTitle()}</td>
 					</tr>
-				
 					}
+				}
 				 
 			</tbody>
 		</table>

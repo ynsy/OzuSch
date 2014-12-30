@@ -32,16 +32,16 @@ import views.html.signUpPage;
 import views.html.scheduler;
 
 public class Application extends Controller {
-	public Boolean noProblemForMultiple = true;
-	public ArrayList<CourseSection> multipleSectionsResult;
-	public ArrayList<Course> multipleSectionCourses;
-	public ArrayList<Course> oneSectionCourses;
-	public ArrayList<ArrayList<CourseSection>> result;
-	public ArrayList<CourseSection> oneSectionsResult;
+	public static Boolean noProblemForMultiple = true;
+	public static ArrayList<CourseSection> multipleSectionsResult;
+	public static ArrayList<Course> multipleSectionCourses;
+	public static ArrayList<Course> oneSectionCourses;
+	public static ArrayList<ArrayList<CourseSection>> result;
+	public static ArrayList<CourseSection> oneSectionsResult;
 	public static ArrayList<String> studentInformation = new ArrayList<String>();
 	public static ArrayList<Student> dbStudentsList = new ArrayList<Student>();
-	public Day[] calendarOneAdded;
-	public Boolean noProblemForOne;
+	public static Day[] calendarOneAdded;
+	public static Boolean noProblemForOne;
 	public static ArrayList<Course> usrCourseList = new ArrayList<Course>();
 	public static ArrayList<models.JSONParser.Course> courseList;
 	private static String title = "OzUSch";
@@ -55,16 +55,16 @@ public class Application extends Controller {
 	public static Result index() throws ClassNotFoundException, SQLException,
 			FileNotFoundException, IOException, ParseException {
 
-		// models.JSONParser.Main.parseJSON();
-		// models.JSONParser.Course.addCoursesToDatabase();
-		// models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-		// models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+		 models.JSONParser.Main.parseJSON();
+		 models.JSONParser.Course.addCoursesToDatabase();
+		 models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
 		// return ok(homePage.render("deneme","home"));
 
 		// After first connection please comment below line.
 
-		// Student.addUniversityToDatabase();
+		 Student.addUniversityToDatabase();
 		String user = session("isLoggedIn");
 		String username = session("username");
 		 if(user != null) {
@@ -189,53 +189,12 @@ public class Application extends Controller {
 			selectedCourse.add(controllers.Student.selectedCourses(token));
 		}
 
-		// for (models.JSONParser.Course course : selectedCourse) {
-		// ArrayList<LectureInterval> lectureIntervals = new
-		// ArrayList<LectureInterval>();
-		// lectureIntervals = course.getLectures();
-		//
-		// int startHour = 0;
-		// int startMinute = 0;
-		// int finishHour = 0;
-		// int finishMinute = 0;
-		// String day = "";
-		//
-		// if(finalCourses.isEmpty()){
-		// finalCourses.add(course);
-		// }else{
-		// for (LectureInterval lectureInterval : lectureIntervals) {
-		// startHour = lectureInterval.getStartHour();
-		// startMinute = lectureInterval.getStartMinute();
-		// finishHour = lectureInterval.getFinishHour();
-		// finishMinute = lectureInterval.getFinishMinute();
-		// day = lectureInterval.getDay();
-		// }
-		// for (models.JSONParser.Course finalCourse : finalCourses) {
-		// ArrayList<LectureInterval> finalLectureInvervals = new
-		// ArrayList<LectureInterval>();
-		// finalLectureInvervals = finalCourse.getLectures();
-		//
-		// for (LectureInterval finalLectureInverval : finalLectureInvervals) {
-		// int finalStartHour = finalLectureInverval.getStartHour();
-		// int finalStartMinute = finalLectureInverval.getStartMinute();
-		// int finalFinishHour = finalLectureInverval.getFinishHour();
-		// int finalFinishMinute = finalLectureInverval.getFinishMinute();
-		// String finalDay = finalLectureInverval.getDay();
-		//
-		// if(day.equals(finalDay)){
-		// if()
-		// }else{
-		// finalCourses.
-		// }
-		//
-		// }
-		// }
-		// }
-		// }
-
+		
+		startScheduler();
+		
 
 		if(user != null) {
-			return ok(scheduler.render(title, "scheduler", url, finalCourses, true));
+			return ok(scheduler.render(title, "scheduler", url, result, true));
 		  } else {
 			  return redirect("/login");
 		  }
@@ -335,18 +294,87 @@ public class Application extends Controller {
 		return ok(signUpPage.render(title, "signUp", url, "mesaj: " + message,
 				taskForm, false));
 	}
+	public static void selectedCoursesToCourses(){
+		if (!selectedCourse.isEmpty()){
+			for (models.JSONParser.Course selectedSection : selectedCourse) {
+				if(usrCourseList.isEmpty()){
+					Course course = new Course(selectedSection.getSubjectName(), selectedSection.getCourseNo());
+					CourseSection section = new CourseSection(course.courseTitle, selectedSection.getSectionNo(), "testInstructor");	
+					for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
+						int startHour = lectureInterval.getStartHour();
+						int startMinute = lectureInterval.getStartMinute();
+						int finishHour = lectureInterval.getFinishHour();
+						int finishMinute = lectureInterval.getFinishMinute();
+						
+						String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
+						String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
+						
+						String day = lectureInterval.getDay();
+						
+						TimePeriod time = new TimePeriod(day, startTime, finishTime);
+						section.addTime(time);
+					}
+					course.addSection(section);
+					usrCourseList.add(course);
+				}else{
+					for (Course existCourse : usrCourseList) {
+						String name = selectedSection.getSubjectName();
+						name += selectedSection.getCourseNo();
+						if(existCourse.courseTitle.equals(name)){
+							CourseSection section = new CourseSection(existCourse.courseTitle, selectedSection.getSectionNo(), "testInstructor");
+							for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
+								int startHour = lectureInterval.getStartHour();
+								int startMinute = lectureInterval.getStartMinute();
+								int finishHour = lectureInterval.getFinishHour();
+								int finishMinute = lectureInterval.getFinishMinute();
+								
+								String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
+								String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
+								
+								String day = lectureInterval.getDay();
+								
+								TimePeriod time = new TimePeriod(day, startTime, finishTime);
+								section.addTime(time);
+							}
+							existCourse.addSection(section);
+						}else {
+							Course course = new Course(selectedSection.getSubjectName(), selectedSection.getCourseNo());
+							CourseSection section = new CourseSection(course.courseTitle, selectedSection.getSectionNo(), "testInstructor");	
+							for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
+								int startHour = lectureInterval.getStartHour();
+								int startMinute = lectureInterval.getStartMinute();
+								int finishHour = lectureInterval.getFinishHour();
+								int finishMinute = lectureInterval.getFinishMinute();
+								
+								String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
+								String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
+								
+								String day = lectureInterval.getDay();
+								
+								TimePeriod time = new TimePeriod(day, startTime, finishTime);
+								section.addTime(time);
+							}
+							course.addSection(section);
+							usrCourseList.add(course);
+						}
+					}
+				}
+			}
+		}
+	}
 
-//	public void startScheduler(ArrayList<Course> usrCourseList) {
-//		Scheduler sch = new Scheduler(usrCourseList);
-//		this.usrCourseList = usrCourseList;
-//		if (!this.usrCourseList.isEmpty()) {
-//			setOneSectionCourses();
-//			setScheduleForOneSections();
-//			setMultipleSectionCourses();
-//		}
-//	}
+	public static ArrayList<ArrayList<CourseSection>> startScheduler() {
+		selectedCoursesToCourses();
+		if (!usrCourseList.isEmpty()) {
+			setOneSectionCourses();
+			setScheduleForOneSections();
+			setMultipleSectionCourses();
+			return result;
+		}
+		return null;
+	}
 
-	private void setOneSectionCourses() {
+	private static void setOneSectionCourses() {
 		// Seperate courses which have only one section from the others
 		int lastIndex = usrCourseList.size();
 		for (int index = 0; index < lastIndex; index++) {
@@ -359,7 +387,7 @@ public class Application extends Controller {
 		}
 	}
 
-	private void setTimeIntervals(int timeIndex, int startIndex, int period,
+	private static void setTimeIntervals(int timeIndex, int startIndex, int period,
 			int day, String type, Day[] calendar) {
 		// set Week with relevant meetingTime
 		if (timeIndex == startIndex) {
@@ -388,7 +416,7 @@ public class Application extends Controller {
 		}
 	}
 
-	private void lookMeetingTimes(ArrayList<TimePeriod> meetingTimes,
+	private static void lookMeetingTimes(ArrayList<TimePeriod> meetingTimes,
 			String type, Day[] calendar) {
 		// look meetingTimes for relevant course
 		if (meetingTimes.size() > 0) {
@@ -421,7 +449,7 @@ public class Application extends Controller {
 		}
 	}
 
-	private void setScheduleForOneSections() {
+	private static void setScheduleForOneSections() {
 		if (!oneSectionCourses.isEmpty()) {
 			Day[] calendar = new Week().getWeek();
 			for (int index = 0; index < oneSectionCourses.size(); index++) {
@@ -444,7 +472,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public void setScheduleForMultipleSections(
+	public static void setScheduleForMultipleSections(
 			ArrayList<Course> multipleSectionCourses, int courseIndex,
 			ArrayList<CourseSection> multipleSectionsResult, Day[] newCalendar) {
 		if (!multipleSectionCourses.isEmpty()) {
@@ -494,7 +522,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public void setMultipleSectionCourses() {
+	public static void setMultipleSectionCourses() {
 		if (noProblemForOne) {
 			if (multipleSectionCourses.size() > 0) {
 				if (multipleSectionCourses.size() != 1) {
@@ -515,7 +543,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public void setNoProblem(String type) {
+	public static void setNoProblem(String type) {
 		if (type.equals("OneSection")) {
 			noProblemForOne = false;
 		} else {
@@ -523,7 +551,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public boolean getNoProblem(String type) {
+	public static boolean getNoProblem(String type) {
 		if (type.equals("OneSection")) {
 			return noProblemForOne;
 		} else {
