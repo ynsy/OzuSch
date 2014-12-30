@@ -1,5 +1,5 @@
-@(title: String, page: String, url: String, courseList: List[models.JSONParser.Course])
-@header(title,page,url)
+@(title: String, page: String, url: String, courseList: List[models.JSONParser.Course], isLoggedIn: Boolean)
+@header(title,page,url,isLoggedIn)
 
 <div class="container">
 @helper.form(action = routes.Application.scheduler()) {

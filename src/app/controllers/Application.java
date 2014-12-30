@@ -65,11 +65,16 @@ public class Application extends Controller {
 		// After first connection please comment below line.
 
 		// Student.addUniversityToDatabase();
-
-		// retrieveStudentInformationFromDB();
-		// selectedCourses();
-		return ok(homePage.render(title, "home", url));
-
+		String user = session("isLoggedIn");
+		String username = session("username");
+		 if(user != null) {
+			 return ok(homePage.render(title, "home", url, true, username));
+		  } else {
+			 return ok(homePage.render(title, "home", url, false, username));
+		  }
+			  
+		 
+			
 	}
 
 	public static void retrieveStudentInformationFromDB() throws SQLException,
@@ -97,12 +102,20 @@ public class Application extends Controller {
 	public static Result offeredCourses() throws ClassNotFoundException,
 			SQLException, FileNotFoundException, IOException, ParseException {
 
+		String user = session("isLoggedIn");
+		
+		
 		DatabaseConnector.makeConnection();
 		models.JSONParser.Course.retrieveCourseListFromDB();
 		courseList = models.JSONParser.Course.getDbCourseList();
 
-		return ok(offeredCourses.render(title, "offeredCourses", url,
-				courseList));
+		 if(user != null) {
+			 return ok(offeredCourses.render(title, "offeredCourses", url,
+						courseList,true));
+		  } else {
+			  return redirect("/login");
+		  }
+		
 	}
 
 	static Form<Courses> courseForm = Form.form(Courses.class);
@@ -110,6 +123,9 @@ public class Application extends Controller {
 	public static Result selectedCourses() throws ClassNotFoundException,
 			SQLException, FileNotFoundException, IOException, ParseException {
 
+
+		String user = session("isLoggedIn");
+		
 		DatabaseConnector.makeConnection();
 		models.JSONParser.Course.retrieveCourseListFromDB();
 		Form<Courses> filledForm = courseForm.bindFromRequest();
@@ -136,13 +152,21 @@ public class Application extends Controller {
 			selectedCourse.add(controllers.Student.selectedCourses(token));
 		}
 
-		return ok(selectedCourses.render(title, "selectedCourses", url,
-				selectedCourse));
+		if(user != null) {
+			return ok(selectedCourses.render(title, "selectedCourses", url,
+					selectedCourse,true));
+		  } else {
+			  return redirect("/login");
+		  }
+		
 	}
 
 	public static Result scheduler() throws ClassNotFoundException,
 			SQLException {
 
+
+		String user = session("isLoggedIn");
+		
 		DatabaseConnector.makeConnection();
 		String value = "";
 		ArrayList<models.JSONParser.Course> selectedCourse = new ArrayList<models.JSONParser.Course>();
@@ -209,7 +233,12 @@ public class Application extends Controller {
 		// }
 		// }
 
-		return ok(scheduler.render(title, "selectedCourses", url, finalCourses));
+
+		if(user != null) {
+			return ok(scheduler.render(title, "scheduler", url, finalCourses, true));
+		  } else {
+			  return redirect("/login");
+		  }
 	}
 
 	static Form<Students> taskForm = Form.form(Students.class);
@@ -217,12 +246,41 @@ public class Application extends Controller {
 	public static Result signUp() {
 
 		return ok(signUpPage.render(title, "signUp", url,
-				"This is sign-up page. Please register to system.", taskForm));
+				"This is sign-up page. Please register to system.", taskForm, false));
 	}
 
-	public static Result login() {
-		return ok(loginPage.render(title, "login", url,
-				"This is login page. Please login to system."));
+	public static Result logout(){
+		session().clear();
+		return redirect("/");
+	}
+
+	
+	static Form<Students> loginForm = Form.form(Students.class);
+	public static Result login() throws Exception{
+
+		Form<Students> filledForm = loginForm.bindFromRequest();
+		String username = filledForm.data().get("username");
+		String password = filledForm.data().get("password");	
+		
+		return ok(loginPage.render(title, "login", url, "Please login", false));
+	}
+	
+	public static Result loginStudent() throws Exception{
+		Form<Students> filledForm = loginForm.bindFromRequest();
+		String username = filledForm.data().get("username");
+		String password = filledForm.data().get("password");	
+		password = PasswordEncryption.mixPassword(password);
+		Boolean isLoggedIn = Student.login(username, password);
+		
+		if(isLoggedIn){
+			session("isLoggedIn", "true");
+			session("username", username);
+			return redirect("/");
+		}else{
+			return redirect("/login");
+		}
+		//return ok(loginPage.render(title, "login", url,"user: "+username+", pass: "+password+": "+isLoggedIn));
+
 	}
 
 	public static Result newStudent() throws Exception {
@@ -275,18 +333,18 @@ public class Application extends Controller {
 		Boolean validEmail = Students.isEmailValid(email);
 
 		return ok(signUpPage.render(title, "signUp", url, "mesaj: " + message,
-				taskForm));
+				taskForm, false));
 	}
 
-	public void startScheduler(ArrayList<Course> usrCourseList) {
-		Scheduler sch = new Scheduler(usrCourseList);
-		this.usrCourseList = usrCourseList;
-		if (!this.usrCourseList.isEmpty()) {
-			setOneSectionCourses();
-			setScheduleForOneSections();
-			setMultipleSectionCourses();
-		}
-	}
+//	public void startScheduler(ArrayList<Course> usrCourseList) {
+//		Scheduler sch = new Scheduler(usrCourseList);
+//		this.usrCourseList = usrCourseList;
+//		if (!this.usrCourseList.isEmpty()) {
+//			setOneSectionCourses();
+//			setScheduleForOneSections();
+//			setMultipleSectionCourses();
+//		}
+//	}
 
 	private void setOneSectionCourses() {
 		// Seperate courses which have only one section from the others

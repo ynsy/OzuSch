@@ -51,12 +51,14 @@ public class Student {
 	}
 
 	// user selected courses retrieving information from DB
-	public static Course selectedCourses(int id) throws SQLException, ClassNotFoundException {
+	public static Course selectedCourses(int id) throws SQLException,
+			ClassNotFoundException {
 		DatabaseConnector.makeConnection();
 		statement = DatabaseConnector.connection
-				.prepareStatement("SELECT c.id, c.subject_name, c.course_no, c.display_name, c.section_no, ci.id, ci.name, ci.surname, li.id, li.start_hour, li.start_minute, li.end_hour, li.end_minute, li.day, li.room_code  FROM courses as c left outer join course_instructors as ci on c.id = ci.course_id left outer join lecture_intervals as li on c.id = li.course_id where c.id = "+ id + ";");
+				.prepareStatement("SELECT c.id, c.subject_name, c.course_no, c.display_name, c.section_no, ci.id, ci.name, ci.surname, li.id, li.start_hour, li.start_minute, li.end_hour, li.end_minute, li.day, li.room_code  FROM courses as c left outer join course_instructors as ci on c.id = ci.course_id left outer join lecture_intervals as li on c.id = li.course_id where c.id = "
+						+ id + ";");
 		resultSet = statement.executeQuery();
-		
+
 		Course course = null;
 		ArrayList<CourseInstructor> courseInstructor = new ArrayList<CourseInstructor>();
 		ArrayList<LectureInterval> lectureIntervals = new ArrayList<LectureInterval>();
@@ -65,20 +67,25 @@ public class Student {
 			course = new Course(resultSet.getInt(1), resultSet.getString(2),
 					resultSet.getString(3), resultSet.getString(4),
 					resultSet.getString(5));
-			
-			
-			CourseInstructor ins = new CourseInstructor(resultSet.getInt(6), resultSet.getInt(1) ,resultSet.getString(7), resultSet.getString(8), resultSet.getBoolean(9));
-			
+
+			CourseInstructor ins = new CourseInstructor(resultSet.getInt(6),
+					resultSet.getInt(1), resultSet.getString(7),
+					resultSet.getString(8), resultSet.getBoolean(9));
+
 			courseInstructor.add(ins);
 			course.setInstructor(courseInstructor);
-			
-			LectureInterval lInterval = new LectureInterval(resultSet.getInt(9), resultSet.getInt(1), resultSet.getInt(10), resultSet.getInt(11), resultSet.getInt(12), resultSet.getInt(13), resultSet.getString(14), resultSet.getString(15));
-			
+
+			LectureInterval lInterval = new LectureInterval(
+					resultSet.getInt(9), resultSet.getInt(1),
+					resultSet.getInt(10), resultSet.getInt(11),
+					resultSet.getInt(12), resultSet.getInt(13),
+					resultSet.getString(14), resultSet.getString(15));
+
 			lectureIntervals.add(lInterval);
 			course.setLectures(lectureIntervals);
-			
-		} 
-	
+
+		}
+
 		statement.close();
 		resultSet.close();
 
@@ -119,25 +126,50 @@ public class Student {
 		sendMail(email, "Hi " + name + registerMailInfo);
 	}
 
-	public Boolean login(String displayName, String password) throws Exception {
-		Student st = checkStudent(displayName);
+	public static Boolean login(String displayName, String password)
+			throws Exception {
+		retrieveStudentListFromDB();
+		Student st = checkstdnt(displayName);
+		
 		if (st != null) {
-			if (st.displayName == displayName
-					&& st.password == PasswordEncryption.mixPassword(password)) {
+			if (st.displayName.equals(displayName)
+					&& st.password.equals(password)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public Student checkStudent(String displayName) {
-		for (int i = 0; i < dbStudentsList.size(); i++) {
-			Student st = dbStudentsList.get(i);
-			if (st.displayName == displayName) {
-				return st;
-			}
+	// public static Student checkStudent(String displayName) throws
+	// ClassNotFoundException, SQLException {
+	// Student std = checkstdnt(displayName);
+	// for (int i = 0; i < dbStudentsList.size(); i++) {
+	// Student st = dbStudentsList.get(i);
+	// if (st.displayName == displayName) {
+	// return st;
+	// }
+	// }
+	// return null;
+	// }
+
+	public static Student checkstdnt(String display_name) throws SQLException,
+			ClassNotFoundException {
+		DatabaseConnector.makeConnection();
+		Student std = null;
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT id, name, surname, display_name, email, password FROM students where display_name = \""
+						+ display_name + "\";");
+		resultSet = statement.executeQuery();
+
+		while (resultSet.next()) {
+			std = new Student(resultSet.getString(2), resultSet.getString(3),
+					resultSet.getString(4), resultSet.getString(5),
+					resultSet.getString(6));
+
 		}
-		return null;
+		statement.close();
+		resultSet.close();
+		return std;
 	}
 
 	public void addPassedCourses(Course courseTitle) {
@@ -199,24 +231,25 @@ public class Student {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public static void addUniversityToDatabase() throws SQLException{
+
+	public static void addUniversityToDatabase() throws SQLException {
 		Universities university = new Universities();
-		
+
 		university.id = 1;
 		university.name = "Ozyegin University";
-				
+
 		university.create(university);
-		
-//		DatabaseConnector.statement = DatabaseConnector.connection
-//				.prepareStatement("INSERT INTO universities (id,name) VALUES (1,\"Ozyegin\"");
-//		DatabaseConnector.statement.executeUpdate();
-//		DatabaseConnector.statement.close();
+
+		// DatabaseConnector.statement = DatabaseConnector.connection
+		// .prepareStatement("INSERT INTO universities (id,name) VALUES (1,\"Ozyegin\"");
+		// DatabaseConnector.statement.executeUpdate();
+		// DatabaseConnector.statement.close();
 	}
+
 	public static void addStudentToDatabase(String name, String surname,
 			String displayName, String email, String password)
 			throws SQLException {
-		
+
 		DatabaseConnector.statement = DatabaseConnector.connection
 				.prepareStatement("INSERT INTO students (id,name,surname,display_name,email, password, university_id) VALUES ("
 						+ id
@@ -235,5 +268,21 @@ public class Student {
 		DatabaseConnector.statement.close();
 	}
 
+	public static void retrieveStudentListFromDB() throws SQLException,
+			ClassNotFoundException {
+		DatabaseConnector.makeConnection();
+		statement = DatabaseConnector.connection
+				.prepareStatement("SELECT id, name, surname, display_name, email, password FROM students");
+		resultSet = statement.executeQuery();
+
+		while (resultSet.next()) {
+			Student std = new Student(resultSet.getString(2),
+					resultSet.getString(3), resultSet.getString(4),
+					resultSet.getString(5), resultSet.getString(6));
+			dbStudentsList.add(std);
+		}
+		statement.close();
+		resultSet.close();
+	}
 
 }

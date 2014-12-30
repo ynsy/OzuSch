@@ -19,6 +19,11 @@ POST    /signup                 	controllers.Application.newStudent()
 
 # Login Page
 GET     /login             			controllers.Application.login()
+POST    /login             			controllers.Application.loginStudent()
+
+
+# Logout Page
+GET     /logout             		controllers.Application.logout()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
