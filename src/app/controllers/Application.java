@@ -66,11 +66,17 @@ public class Application extends Controller {
 		// After first connection please comment below line.
 
 		// Student.addUniversityToDatabase();
+		
 		String user = session("isLoggedIn");
 		String username = session("username");
 		if (user != null) {
 			return ok(homePage.render(title, "home", url, true, username));
 		} else {
+
+			CreationCaptchaImage ci = new CreationCaptchaImage();
+			ci.createCaptcha();
+			
+			session("captcha", ci.getCaptchaValue());
 			return ok(homePage.render(title, "home", url, false, username));
 		}
 
@@ -240,7 +246,10 @@ public class Application extends Controller {
 	static Form<Students> taskForm = Form.form(Students.class);
 
 	public static Result signUp() {
-
+		CreationCaptchaImage ci = new CreationCaptchaImage();
+		ci.createCaptcha();
+		
+		session("captcha", ci.getCaptchaValue());
 		return ok(signUpPage.render(title, "signUp", url,
 				"This is sign-up page. Please register to system.", taskForm,
 				false));
@@ -255,6 +264,11 @@ public class Application extends Controller {
 
 	public static Result login() throws Exception {
 
+
+		CreationCaptchaImage ci = new CreationCaptchaImage();
+		ci.createCaptcha();
+		
+		session("captcha", ci.getCaptchaValue());
 		Form<Students> filledForm = loginForm.bindFromRequest();
 		String username = filledForm.data().get("username");
 		String password = filledForm.data().get("password");
@@ -263,19 +277,27 @@ public class Application extends Controller {
 	}
 
 	public static Result loginStudent() throws Exception {
+
 		Form<Students> filledForm = loginForm.bindFromRequest();
 		String username = filledForm.data().get("username");
 		String password = filledForm.data().get("password");
-		password = PasswordEncryption.mixPassword(password);
-		Boolean isLoggedIn = Student.login(username, password);
+		String captcha = filledForm.data().get("captcha");
+		String ses_captcha = session("captcha");
+		if(ses_captcha.equals(captcha)){
+			password = PasswordEncryption.mixPassword(password);
+			Boolean isLoggedIn = Student.login(username, password);
 
-		if (isLoggedIn) {
-			session("isLoggedIn", "true");
-			session("username", username);
-			return redirect("/");
-		} else {
+			if (isLoggedIn) {
+				session("isLoggedIn", "true");
+				session("username", username);
+				return redirect("/");
+			} else {
+				return redirect("/login");
+			}
+		}else{
 			return redirect("/login");
 		}
+		
 		// return ok(loginPage.render(title, "login",
 		// url,"user: "+username+", pass: "+password+": "+isLoggedIn));
 
@@ -288,37 +310,46 @@ public class Application extends Controller {
 		String cpassword = filledForm.data().get("cpassword");
 		String email = filledForm.data().get("email");
 		String cemail = filledForm.data().get("cemail");
+		String captcha = filledForm.data().get("captcha");
 		String message = "";
+		String ses_captcha = session("captcha");
 		if (email.contains(cemail) && password.contains(cpassword)) {
 
 			if (!Students.isEmailValid(email)
 					&& !Students.isUsernameValid(username)) {
 
-				// Universities university = new Universities();
-				// university.id = 1;
-				// university.name = "Ozyegin University";
-				//
-				// university.create(university);
-				//
-				//
-				Students student = new Students();
-				student.display_name = username;
-				student.password = password;
-				student.email = email;
-				student.university = new Universities();
-				student.university.id = 1;
-				student.university.name = "Ozyegin";
+				if(captcha.equals(ses_captcha)){
+					// Universities university = new Universities();
+					// university.id = 1;
+					// university.name = "Ozyegin University";
+					//
+					// university.create(university);
+					//
+					//
+					Students student = new Students();
+					student.display_name = username;
+					student.password = password;
+					student.email = email;
+					student.university = new Universities();
+					student.university.id = 1;
+					student.university.name = "Ozyegin";
 
-				if (Student.checkPasswordSatisfaction(password)) {
-					password = PasswordEncryption.mixPassword(password);
-					Student.addStudentToDatabase("", "", username, email,
-							password);
-					message = "You are now registered to the system.";
-					controllers.Student.sendMail(email,
-							Student.registerMailInfo);
-				} else {
-					message = "Your password is weak";
+					if (Student.checkPasswordSatisfaction(password)) {
+						password = PasswordEncryption.mixPassword(password);
+						Student.addStudentToDatabase("", "", username, email,
+								password);
+						message = "You are now registered to the system.";
+						controllers.Student.sendMail(email,
+								Student.registerMailInfo);
+					} else {
+						message = "Your password is weak";
+					}
+					
+				}else{
+					
+					message = "girilen: "+captcha+", session: "+ses_captcha;
 				}
+				
 
 			} else {
 				message = "Your username or email is used";
@@ -329,6 +360,7 @@ public class Application extends Controller {
 		}
 
 		Boolean validEmail = Students.isEmailValid(email);
+
 
 		return ok(signUpPage.render(title, "signUp", url, message, taskForm,
 				false));

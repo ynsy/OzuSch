@@ -13,20 +13,19 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class CreationCaptchaImage {
+	private static String captchaValue = "";
 
-	public static String captchaValue() {
+	public static String getCaptchaValue(){
+		return captchaValue;
+	}
+	public static void createCaptcha() {
 		Random rand = new Random();
 		String cStr = "";
 		for (int i = 0; i < 5; i++) {
 			int c = rand.nextInt(10);
 			cStr += "" + c;
 		}
-		System.out.println(cStr);
-		return cStr;
-	}
-
-	public static void createCaptcha() {
-		String text = captchaValue();
+		captchaValue = cStr;
 
 		/*
 		 * Because font metrics is based on a graphics context, we need to
@@ -38,7 +37,7 @@ public class CreationCaptchaImage {
 		Font font = new Font("Arial", Font.PLAIN, 48);
 		g2d.setFont(font);
 		FontMetrics fm = g2d.getFontMetrics();
-		int width = fm.stringWidth(text);
+		int width = fm.stringWidth(captchaValue);
 		int height = fm.getHeight();
 		g2d.dispose();
 
@@ -63,10 +62,10 @@ public class CreationCaptchaImage {
 		g2d.setFont(font);
 		fm = g2d.getFontMetrics();
 		g2d.setColor(Color.BLACK);
-		g2d.drawString(text, 0, fm.getAscent());
+		g2d.drawString(captchaValue, 0, fm.getAscent());
 		g2d.dispose();
 		try {
-			ImageIO.write(img, "png", new File("Text.png"));
+			ImageIO.write(img, "png", new File("public/images/captcha.png"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
