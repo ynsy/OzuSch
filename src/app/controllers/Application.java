@@ -315,7 +315,7 @@ public class Application extends Controller {
 					password = PasswordEncryption.mixPassword(password);
 					Student.addStudentToDatabase("", "", username, email,
 							password);
-					message = "Successful";
+					message = "You are now registered to the system.";
 					controllers.Student.sendMail(email,
 							Student.registerMailInfo);
 				} else {
@@ -332,7 +332,7 @@ public class Application extends Controller {
 
 		Boolean validEmail = Students.isEmailValid(email);
 
-		return ok(signUpPage.render(title, "signUp", url, "mesaj: " + message,
+		return ok(signUpPage.render(title, "signUp", url, message,
 				taskForm, false));
 	}
 
