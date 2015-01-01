@@ -54,20 +54,20 @@ public class Application extends Controller {
 	public static String insertIntoCourses = "INSERT INTO courses (id) VALUES (1);";
 
 	public static Result index() throws ClassNotFoundException, SQLException,
-			FileNotFoundException, IOException, ParseException {
+	FileNotFoundException, IOException, ParseException {
 
-//		 models.JSONParser.Main.parseJSON();
-//		 models.JSONParser.Course.addCoursesToDatabase();
-//		 models.JSONParser.CourseInstructor.addInstructorsToDatabase();
-//		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
+		//		 models.JSONParser.Main.parseJSON();
+		//		 models.JSONParser.Course.addCoursesToDatabase();
+		//		 models.JSONParser.CourseInstructor.addInstructorsToDatabase();
+		//		 models.JSONParser.LectureInterval.addLectureIntervalsToDatabase();
 
 		// return ok(homePage.render("deneme","home"));
 
 		// After first connection please comment below line.
 
-	//	 Student.addUniversityToDatabase();
+		//	 Student.addUniversityToDatabase();
 
-//		Student.addUniversityToDatabase();
+		//		Student.addUniversityToDatabase();
 
 		String user = session("isLoggedIn");
 		String username = session("username");
@@ -77,7 +77,7 @@ public class Application extends Controller {
 
 			CreationCaptchaImage ci = new CreationCaptchaImage();
 			ci.createCaptcha();
-			
+
 			session("captcha", ci.getCaptchaValue());
 			return ok(homePage.render(title, "home", url, false, username));
 		}
@@ -85,7 +85,7 @@ public class Application extends Controller {
 	}
 
 	public static void retrieveStudentInformationFromDB() throws SQLException,
-			ClassNotFoundException {
+	ClassNotFoundException {
 		DatabaseConnector.makeConnection();
 		statement = DatabaseConnector.connection
 				.prepareStatement("SELECT display_name, email FROM students");
@@ -107,7 +107,7 @@ public class Application extends Controller {
 	}
 
 	public static Result offeredCourses() throws ClassNotFoundException,
-			SQLException, FileNotFoundException, IOException, ParseException {
+	SQLException, FileNotFoundException, IOException, ParseException {
 
 		String user = session("isLoggedIn");
 
@@ -127,7 +127,7 @@ public class Application extends Controller {
 	static Form<Courses> courseForm = Form.form(Courses.class);
 
 	public static Result selectedCourses() throws ClassNotFoundException,
-			SQLException, FileNotFoundException, IOException, ParseException {
+	SQLException, FileNotFoundException, IOException, ParseException {
 
 		String user = session("isLoggedIn");
 
@@ -167,7 +167,7 @@ public class Application extends Controller {
 	}
 
 	public static Result scheduler() throws ClassNotFoundException,
-			SQLException {
+	SQLException {
 
 		String user = session("isLoggedIn");
 
@@ -193,18 +193,18 @@ public class Application extends Controller {
 			selectedCourse.add(controllers.Student.selectedCourses(token));
 		}
 
-		
+
 		startScheduler();
-		
+
 		System.out.println("RESUlT:" + result);
-		
+
 
 		if(user != null) {
 			return ok(scheduler.render(title, "scheduler", url, result, true));
-		  } else {
-			  return redirect("/login");
-		  }
-		
+		} else {
+			return redirect("/login");
+		}
+
 	}
 
 	static Form<Students> taskForm = Form.form(Students.class);
@@ -212,7 +212,7 @@ public class Application extends Controller {
 	public static Result signUp() {
 		CreationCaptchaImage ci = new CreationCaptchaImage();
 		ci.createCaptcha();
-		
+
 		session("captcha", ci.getCaptchaValue());
 		return ok(signUpPage.render(title, "signUp", url,
 				"This is sign-up page. Please register to system.", taskForm,
@@ -231,7 +231,7 @@ public class Application extends Controller {
 
 		CreationCaptchaImage ci = new CreationCaptchaImage();
 		ci.createCaptcha();
-		
+
 		session("captcha", ci.getCaptchaValue());
 		Form<Students> filledForm = loginForm.bindFromRequest();
 		String username = filledForm.data().get("username");
@@ -261,7 +261,7 @@ public class Application extends Controller {
 		}else{
 			return redirect("/login");
 		}
-		
+
 		// return ok(loginPage.render(title, "login",
 		// url,"user: "+username+", pass: "+password+": "+isLoggedIn));
 
@@ -308,12 +308,12 @@ public class Application extends Controller {
 					} else {
 						message = "Your password is weak";
 					}
-					
+
 				}else{
-					
+
 					message = "girilen: "+captcha+", session: "+ses_captcha;
 				}
-				
+
 
 			} else {
 				message = "Your username or email is used";
@@ -334,64 +334,76 @@ public class Application extends Controller {
 			for (models.JSONParser.Course selectedSection : selectedCourse) {
 				if(usrCourseList.isEmpty()){
 					Course course = new Course(selectedSection.getSubjectName(), selectedSection.getCourseNo());
-					CourseSection section = new CourseSection(course.courseTitle, selectedSection.getSectionNo(), "testInstructor");	
+					CourseSection section = new CourseSection(course.courseTitle, selectedSection.getSectionNo(), "testInstructor");
 					for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
 						int startHour = lectureInterval.getStartHour();
 						int startMinute = lectureInterval.getStartMinute();
 						int finishHour = lectureInterval.getFinishHour();
 						int finishMinute = lectureInterval.getFinishMinute();
-						
+
 						String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
 						String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
-						
+
 						String day = lectureInterval.getDay();
-						
+
 						TimePeriod time = new TimePeriod(day, startTime, finishTime);
 						section.addTime(time);
 					}
 					course.addSection(section);
+					System.out.println("Girdi 1: " + course.courseTitle + "-" + course.sections.get(0).sectionTitle);
 					usrCourseList.add(course);
+					System.out.println("Birinci için: "+ usrCourseList.size());
 				}else{
+					boolean isExist = false;
 					for (Course existCourse : usrCourseList) {
+						System.out.println("Hello: " + usrCourseList.indexOf(existCourse));
 						String name = selectedSection.getSubjectName();
 						name += selectedSection.getCourseNo();
 						if(existCourse.courseTitle.equals(name)){
+							System.out.println("Aynı");
 							CourseSection section = new CourseSection(existCourse.courseTitle, selectedSection.getSectionNo(), "testInstructor");
 							for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
 								int startHour = lectureInterval.getStartHour();
 								int startMinute = lectureInterval.getStartMinute();
 								int finishHour = lectureInterval.getFinishHour();
 								int finishMinute = lectureInterval.getFinishMinute();
-								
+
 								String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
 								String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
-								
+
 								String day = lectureInterval.getDay();
-								
+
 								TimePeriod time = new TimePeriod(day, startTime, finishTime);
 								section.addTime(time);
 							}
 							existCourse.addSection(section);
-						}else {
-							Course course = new Course(selectedSection.getSubjectName(), selectedSection.getCourseNo());
-							CourseSection section = new CourseSection(course.courseTitle, selectedSection.getSectionNo(), "testInstructor");	
-							for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
-								int startHour = lectureInterval.getStartHour();
-								int startMinute = lectureInterval.getStartMinute();
-								int finishHour = lectureInterval.getFinishHour();
-								int finishMinute = lectureInterval.getFinishMinute();
-								
-								String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
-								String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
-								
-								String day = lectureInterval.getDay();
-								
-								TimePeriod time = new TimePeriod(day, startTime, finishTime);
-								section.addTime(time);
-							}
-							course.addSection(section);
-							usrCourseList.add(course);
+							System.out.println("Girdi 3: " + existCourse.courseTitle + "-" + section.sectionTitle);
+							isExist = true;
+							break;
 						}
+					}
+					if(isExist == false){
+						Course course = new Course(selectedSection.getSubjectName(), selectedSection.getCourseNo());
+						CourseSection section = new CourseSection(course.courseTitle, selectedSection.getSectionNo(), "testInstructor");
+
+						for (models.JSONParser.LectureInterval lectureInterval : selectedSection.getLectures()) {
+							int startHour = lectureInterval.getStartHour();
+							int startMinute = lectureInterval.getStartMinute();
+							int finishHour = lectureInterval.getFinishHour();
+							int finishMinute = lectureInterval.getFinishMinute();
+
+							String startTime = Integer.toString(startHour) + ":" + Integer.toString(startMinute);
+							String finishTime = Integer.toString(finishHour) + ":" + Integer.toString(finishMinute);
+
+							String day = lectureInterval.getDay();
+
+							TimePeriod time = new TimePeriod(day, startTime, finishTime);
+							section.addTime(time);
+						}
+						course.addSection(section);
+						System.out.println("Girdi 2: " + course.courseTitle + "-" + course.sections.get(0).sectionTitle);
+						usrCourseList.add(course);
+						System.out.println("İkinci için: "+ usrCourseList.size());
 					}
 				}
 			}
@@ -399,9 +411,9 @@ public class Application extends Controller {
 	}
 
 	public static void startScheduler() {
-		//usrCourseList.clear();
+		usrCourseList.clear();
 		System.out.println(usrCourseList.isEmpty());
-		System.out.println("CourseList: " + courseList);
+		System.out.println("SelectedCourse: " + selectedCourse.size());
 		selectedCoursesToCourses();
 		System.out.println("Size: " + usrCourseList.size());
 		if (!usrCourseList.isEmpty()) {
@@ -409,6 +421,7 @@ public class Application extends Controller {
 			setScheduleForOneSections();
 			setMultipleSectionCourses();
 		}
+		System.out.println(result.size());
 	}
 
 
@@ -541,7 +554,7 @@ public class Application extends Controller {
 					Day[] calendar = week.getCalendar(newCalendar);
 					lookMeetingTimes(
 							multipleSectionCourses.get(courseIndex).sections
-									.get(sectionIndex).meetingTimes,
+							.get(sectionIndex).meetingTimes,
 							"MultipleSections", calendar);
 
 					if (getNoProblem("MultipleSections")) {
@@ -576,7 +589,6 @@ public class Application extends Controller {
 	public static void setMultipleSectionCourses() {
 		if (noProblemForOne) {
 			if (multipleSectionCourses.size() > 0) {
-				System.out.println("Girmememli!!!");
 				if (multipleSectionCourses.size() != 1) {
 					// multipleSectionCourses.sort()
 				}
