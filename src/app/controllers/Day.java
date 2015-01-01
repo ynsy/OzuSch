@@ -15,13 +15,12 @@ public class Day {
 	}
 
 	public ArrayList<Oclock> oClock = new ArrayList<Oclock>();
-	public Oclock oclock = new Oclock();
 
 	public Day(String name) {
 		this.name = name;
 		// start from 8 am, end at 10:59 pm (15 hours)
 		for (int index = 0; index < 15; index++) {
-			this.oClock.add(oclock);
+			this.oClock.add(new Oclock());
 		}
 	}
 	

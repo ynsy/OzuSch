@@ -65,9 +65,9 @@ public class Application extends Controller {
 
 		// After first connection please comment below line.
 
-//		 Student.addUniversityToDatabase();
+	//	 Student.addUniversityToDatabase();
 
-		// Student.addUniversityToDatabase();
+//		Student.addUniversityToDatabase();
 
 		String user = session("isLoggedIn");
 		String username = session("username");
@@ -399,6 +399,9 @@ public class Application extends Controller {
 	}
 
 	public static void startScheduler() {
+		//usrCourseList.clear();
+		System.out.println(usrCourseList.isEmpty());
+		System.out.println("CourseList: " + courseList);
 		selectedCoursesToCourses();
 		System.out.println("Size: " + usrCourseList.size());
 		if (!usrCourseList.isEmpty()) {
@@ -428,6 +431,7 @@ public class Application extends Controller {
 	private static void setTimeIntervals(int timeIndex, int startIndex, int period,
 			int day, String type, Day[] calendar) {
 		// set Week with relevant meetingTime
+		System.out.println("TimeIndex: " + timeIndex + "\nStartIndex: " + startIndex + "\nPeriod: " + period);
 		if (timeIndex == startIndex) {
 			if (calendar[day].oClock.get(startIndex).isStartAvailable == true) {
 				System.out.println("Degisti 1");
@@ -454,7 +458,7 @@ public class Application extends Controller {
 					setNoProblem(type);
 				}
 			} else {
-				System.out.println("Hata 1");
+				System.out.println("Hata 1" + calendar[day].oClock.get(timeIndex).isStartAvailable);
 				setNoProblem(type);
 			}
 		}
@@ -472,7 +476,7 @@ public class Application extends Controller {
 					// lessons allways start min at 8 so startHour-8
 					int startIndex = (meetingTimes.get(meetingIndex).startHour) - 8;
 					int period = startIndex + meetingTimes.get(meetingIndex).hours;
-					for (int timeIndex = startIndex; startIndex < period; timeIndex++) {
+					for (int timeIndex = startIndex; timeIndex < period; timeIndex++) {
 						if (getNoProblem(type) == true
 								&& type.equals("OneSection")) {
 							System.out.println("Sete Girdi!");
