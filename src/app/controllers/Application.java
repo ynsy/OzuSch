@@ -452,10 +452,10 @@ public class Application extends Controller {
 			} else {
 				setNoProblem(type);
 			}
-		} else if (timeIndex == period) {
-			if (calendar[day].oClock.get(period).isEndAvailable == true) {
+		} else if (timeIndex == period-1) {
+			if (calendar[day].oClock.get(timeIndex).isEndAvailable == true) {
 				System.out.println("Degisti Son");
-				calendar[day].oClock.get(period).isEndAvailable = false;
+				calendar[day].oClock.get(timeIndex).isEndAvailable = false;
 			} else {
 				setNoProblem(type);
 			}
