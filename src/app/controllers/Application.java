@@ -412,16 +412,22 @@ public class Application extends Controller {
 
 	public static void startScheduler() {
 		usrCourseList.clear();
-		System.out.println(usrCourseList.isEmpty());
-		System.out.println("SelectedCourse: " + selectedCourse.size());
+		oneSectionCourses.clear();
+		oneSectionsResult.clear();
+		multipleSectionCourses.clear();
+		calendarOneAdded = new Day[5];
+		multipleSectionsResult.clear();
+		result.clear();
+		noProblemForOne = true;
+		noProblemForMultiple = true;
+		
 		selectedCoursesToCourses();
-		System.out.println("Size: " + usrCourseList.size());
 		if (!usrCourseList.isEmpty()) {
 			setOneSectionCourses();
 			setScheduleForOneSections();
 			setMultipleSectionCourses();
 		}
-		System.out.println(result.size());
+
 	}
 
 
@@ -543,15 +549,14 @@ public class Application extends Controller {
 			if (noProblemForMultiple == true) {
 				for (int sectionIndex = 0; sectionIndex < multipleSectionCourses
 						.get(courseIndex).sections.size(); sectionIndex++) {
-					if (courseIndex == 0) {
-						if (multipleSectionCourses.get(courseIndex).sections
-								.get(sectionIndex).sectionTitle == "FIN202-B") {
-							System.out.println("fin202-b");
-						}
-					}
+					
+					
+					System.out.println("Section index: " + sectionIndex);
+						
 					Week week = new Week();
-
+					
 					Day[] calendar = week.getCalendar(newCalendar);
+					
 					lookMeetingTimes(
 							multipleSectionCourses.get(courseIndex).sections
 							.get(sectionIndex).meetingTimes,
@@ -563,7 +568,8 @@ public class Application extends Controller {
 							System.out.println("2");
 						}
 
-						ArrayList<CourseSection> nextMultipleSectionsResult = multipleSectionsResult;
+						ArrayList<CourseSection> nextMultipleSectionsResult = new ArrayList<CourseSection>();
+						nextMultipleSectionsResult.addAll(multipleSectionsResult);
 						nextMultipleSectionsResult.add(multipleSectionCourses
 								.get(courseIndex).sections.get(sectionIndex));
 						if (courseIndex + 1 != multipleSectionCourses.size()) {
@@ -571,8 +577,10 @@ public class Application extends Controller {
 									multipleSectionCourses, courseIndex + 1,
 									nextMultipleSectionsResult, calendar);
 						} else {
-							result.add(nextMultipleSectionsResult);
-							result.add(oneSectionsResult);
+							ArrayList<CourseSection> possibility = new ArrayList<CourseSection>();
+							possibility.addAll(nextMultipleSectionsResult);
+							possibility.addAll(oneSectionsResult);
+							result.add(possibility);
 						}
 					} else {
 						if (multipleSectionCourses.get(courseIndex).sections
@@ -592,15 +600,16 @@ public class Application extends Controller {
 				if (multipleSectionCourses.size() != 1) {
 					// multipleSectionCourses.sort()
 				}
-				Day[] newCalendar;
+				Day[] newCalendar = new Day[5];
 				if (!oneSectionCourses.isEmpty()) {
+					System.out.println("Takvimi verdi!");
 					newCalendar = calendarOneAdded;
 				} else {
 					newCalendar = new Week().getWeek();
 				}
 
 				setScheduleForMultipleSections(multipleSectionCourses, 0,
-						multipleSectionsResult, newCalendar);
+						new ArrayList<CourseSection>(), newCalendar);
 			} else {
 				result.add(oneSectionsResult);
 			}
