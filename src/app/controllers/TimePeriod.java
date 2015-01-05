@@ -8,7 +8,7 @@ public class TimePeriod {
 	int startHour = 0;
 	int endHour = 0;
 	int hours = 0;
-	int dayIndex = 0;
+	public int dayIndex = 0;
 
 	public TimePeriod(String day, String startTime, String endTime) {
 		this.day = day;
