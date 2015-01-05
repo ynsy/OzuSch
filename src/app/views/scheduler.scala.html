@@ -16,16 +16,47 @@
 			<tbody>
 				
 				@for(courseSections <- courseSectionPossibilites){
-				<tr>
-					<td></td>
-					<td></td>
-				</tr>
+				
 					@for(section <- courseSections){
 					<tr>
-						<td></td>
-						<td>@{section.getSectionTitle()}</td>
+						<td>@for(meetingtime <- section.getMeetingTimes()){
+							@if(meetingtime.dayIndex==0){
+								@section.getSectionTitle()
+							}
+						
+						
+						}</td>
+						<td>@for(meetingtime <- section.getMeetingTimes()){
+							@if(meetingtime.dayIndex==1){
+								@section.getSectionTitle()
+							}
+						
+						
+						}</td>
+						<td>@for(meetingtime <- section.getMeetingTimes()){
+							@if(meetingtime.dayIndex==2){
+								@section.getSectionTitle()
+							}
+						
+						
+						}</td>
+						<td>@for(meetingtime <- section.getMeetingTimes()){
+							@if(meetingtime.dayIndex==3){
+								@section.getSectionTitle()
+							}
+						
+						
+						}</td>
+						<td>@for(meetingtime <- section.getMeetingTimes()){
+							@if(meetingtime.dayIndex==4){
+								@section.getSectionTitle()
+							}
+						
+						
+						}</td>
 					</tr>
 					}
+					
 				}
 				 
 			</tbody>
